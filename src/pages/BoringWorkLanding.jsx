@@ -4,10 +4,16 @@ import manImage from '../assets/man.png';
 import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
 import redOxLogo from '../assets/Capture.JPG';
+import Meta from '../components/seo/Meta';
 
 const BoringWorkLanding = () => {
   return (
     <div className="min-h-screen">
+      <Meta
+        title="BoringWork - AI & Automation Solutions for Small Business"
+        description="Say goodbye to busywork with tailored AI & automation solutions. Free up 90% of your time from manual tasks and focus on growing your business."
+        keywords="business automation, AI solutions, small business, productivity, workflow automation, business efficiency"
+      />
       {/* Header */}
       <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

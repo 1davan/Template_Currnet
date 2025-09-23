@@ -1,4 +1,4 @@
-import { Helmet } from '@vuer-ai/react-helmet-async'
+import { Helmet } from 'react-helmet-async'
 
 export default function Meta({
   title = "Client Website",
