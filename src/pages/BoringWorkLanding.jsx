@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Coffee, Calculator, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bot, ChevronLeft, ChevronRight, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall } from 'lucide-react';
 import manImage from '../assets/man.png';
 import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
@@ -215,8 +215,7 @@ const BoringWorkLanding = () => {
 
             {/* Navigation */}
             <nav className="flex items-center space-x-8">
-              <a href="#contact" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact Brese</a>
-              <a href="#account" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Account</a>
+              <a href="#contact" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Contact Us</a>
             </nav>
           </div>
         </div>
@@ -615,9 +614,8 @@ const BoringWorkLanding = () => {
                 ))}
               </div>
             </div>
-
             {/* Dot Indicators */}
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex justify-center mt-14 space-x-2 pb-8">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
@@ -634,8 +632,257 @@ const BoringWorkLanding = () => {
         </div>
       </section>
 
+      {/* How It Works Section - Matching PAS Style */}
+      <section id="how-it-works" className="relative bg-gray-50 py-24 lg:py-40 overflow-hidden">
+        {/* Creative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-200/20 to-purple-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-purple-200/15 to-emerald-200/15 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-emerald-200/10 to-blue-200/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Hero Introduction */}
+          <div className="text-center mb-20">
+             
+              <h2 className="text-2xl lg:text-4xl font-bold text-gray-900">
+                How It Works
+              </h2>
+
+          
+          </div>
+
+          {/* Process Steps - 2x2 Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-24">
+            {/* Step 1: Consultation */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-orange-100/50 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
+
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">📞</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Free 15-Minute Consultation</h3>
+                  <p className="text-orange-600 font-semibold">Step 1: Let's talk</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed">
+                  We start with a quick, no-pressure call to understand what's slowing you down. Can't describe it clearly? That's totally fine.
+                </p>
+                <div className="bg-orange-50 rounded-2xl p-4 shadow-lg border border-orange-100">
+                  <p className="text-gray-800 font-semibold mb-2">What to expect:</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <span className="text-gray-700">No sales pitch</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <span className="text-gray-700">Just understanding your pain</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <span className="text-gray-700">Honest assessment of fit</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 2: Audit */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-lime-100/50 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-green-500"></div>
+
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">🔍</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">In-Depth Systems Audit</h3>
+                  <p className="text-lime-600 font-semibold">Step 2: We dig deep</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed">
+                  If it's a good fit, we come to your site (or Zoom in), dig into your current workflow, and identify what's costing you time, energy, and money.
+                </p>
+                <div className="bg-lime-50 rounded-2xl p-4 shadow-lg border border-lime-100">
+                  <p className="text-gray-800 font-semibold mb-2">We analyze everything:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
+                      <span className="text-gray-700 text-sm">Current tools & software</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
+                      <span className="text-gray-700 text-sm">Workflow bottlenecks</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
+                      <span className="text-gray-700 text-sm">Automation opportunities</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
+                      <span className="text-gray-700 text-sm">Cost vs. benefit analysis</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3: Plan */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-yellow-100/50 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
+
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">📋</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Custom Plan & Quote</h3>
+                  <p className="text-yellow-600 font-semibold">Step 3: Your blueprint</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed">
+                  No cookie-cutters here. We'll design a bespoke solution that shows exactly what we'll build.
+                </p>
+
+                <div className="space-y-3">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">
+                      <span className="font-semibold">What we'll automate</span> – specific tasks and workflows
+                    </p>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">
+                      <span className="font-semibold">Where we'll use AI</span> – and where we won't
+                    </p>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">
+                      <span className="font-semibold">What tools we'll keep</span> – and what we'll ditch
+                    </p>
+                  </div>
+
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    </div>
+                    <p className="text-gray-700 leading-relaxed">
+                      <span className="font-semibold">Custom quote</span> – with no surprise fees
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 4: Build & Results */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-lime-100/50 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-green-500"></div>
+
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">⚙️</span>
+                </div>
+                <div>
+                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Build, Deliver & Results</h3>
+                  <p className="text-lime-600 font-semibold">Step 4: We make it happen</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-gray-700 leading-relaxed">
+                  We roll up our sleeves and build the system — fast, securely, and to spec. Once we hit "go," it's game on.
+                </p>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
+                    <div className="text-lg mb-1">🔧</div>
+                    <p className="text-xs font-semibold text-gray-900">Reliable automations</p>
+                  </div>
+                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
+                    <div className="text-lg mb-1">🔗</div>
+                    <p className="text-xs font-semibold text-gray-900">Seamless integrations</p>
+                  </div>
+                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
+                    <div className="text-lg mb-1">🤖</div>
+                    <p className="text-xs font-semibold text-gray-900">Smart AI implementation</p>
+                  </div>
+                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
+                    <div className="text-lg mb-1">🛡️</div>
+                    <p className="text-xs font-semibold text-gray-900">1 year free support</p>
+                  </div>
+                </div>
+
+                <div className="bg-lime-50 rounded-2xl p-4 shadow-lg border border-lime-100 mt-4">
+                  <p className="text-gray-900 font-semibold mb-2">What happens next?</p>
+                  <div className="space-y-2 text-gray-700 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>
+                      <span>Daily operations run smoothly</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>
+                      <span>You focus on growing your business</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>
+                      <span>We handle any issues that arise</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          {/* CTA Section */}
+          <div className="text-center">
+              <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                Don't know where to begin?
+              </h3>
+            <p className="text-xl text-gray-700 mb-12 max-w-2xl mx-auto leading-relaxed">
+              That's exactly where most of our clients start. Book a free consult and let's figure it out together.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#contact"
+                className="inline-flex items-center justify-center gap-2 bg-lime-500 hover:bg-lime-600 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                <PhoneCall className="w-4 h-4" />
+                Book Your Free Consult
+              </a>
+              <a
+                href="#testimonials"
+                className="inline-flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                See Success Stories
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 };
 
 export default BoringWorkLanding;
+
