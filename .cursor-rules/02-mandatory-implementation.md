@@ -1,4 +1,6 @@
-# 04 - Implementation Protocol - Mandatory Workflow
+# 02 - Mandatory Implementation
+
+**TAGS**: `#workflow` `#implementation`
 
 ## ALWAYS IMPLEMENT, NEVER JUST SUGGEST
 

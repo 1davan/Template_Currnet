@@ -1,4 +1,6 @@
-# 06 - Accessibility Requirements - WCAG AA Compliance
+# 03 - WCAG Compliance
+
+**TAGS**: `#quality` `#accessibility` `#legal`
 
 ## Legal Requirement - Non-Negotiable
 

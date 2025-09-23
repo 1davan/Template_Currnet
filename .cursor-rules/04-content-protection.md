@@ -1,4 +1,6 @@
-# 14 - Copy Protection Rules - Content Preservation
+# 04 - Content Protection
+
+**TAGS**: `#workflow` `#content` `#protection`
 
 ## CRITICAL: Never Overwrite Client-Approved Content
 
