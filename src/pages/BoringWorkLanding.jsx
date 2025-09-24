@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Bot, ChevronLeft, ChevronRight, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall, Workflow, Cpu, Link, BarChart3 } from 'lucide-react';
+import { Bot, ChevronLeft, ChevronRight, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall, Workflow, Cpu, Link, BarChart3, Shield } from 'lucide-react';
 import manImage from '../assets/man.png';
 import busymanImage from '../assets/busyman.png';
+import automationsImage from '../assets/Automations.png';
+import relievedmanImage from '../assets/relievedman.png';
 import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
 import redOxLogo from '../assets/Capture.JPG';
@@ -48,12 +50,15 @@ const BoringWorkLanding = () => {
   const [weveBeenThereSectionExpanded, setWeveBeenThereSectionExpanded] = useState(false);
   const [heresWhatChangesSectionExpanded, setHeresWhatChangesSectionExpanded] = useState(false);
   const [perfectDaySectionExpanded, setPerfectDaySectionExpanded] = useState(false);
+  const [enterBoringWorkScale, setEnterBoringWorkScale] = useState(1);
+  const [enterBoringWorkTranslateY, setEnterBoringWorkTranslateY] = useState(50);
 
   // Refs for the 4 main sections
   const dailyGrindRef = useRef(null);
   const weveBeenThereRef = useRef(null);
   const heresWhatChangesRef = useRef(null);
   const perfectDayRef = useRef(null);
+  const enterBoringWorkRef = useRef(null);
 
   // Auto-play functionality
   useEffect(() => {
@@ -138,6 +143,24 @@ const BoringWorkLanding = () => {
         const shouldExpand = elementCenter <= (scrollTop + viewportMiddle) && elementBottom >= (scrollTop + viewportMiddle);
 
         setPerfectDaySectionExpanded(shouldExpand);
+      }
+
+      // Check Enter BoringWork section - expand when scrolled to
+      if (enterBoringWorkRef.current) {
+        const element = enterBoringWorkRef.current;
+        const rect = element.getBoundingClientRect();
+
+        // Trigger expansion when section enters viewport
+        const viewportHeight = window.innerHeight;
+        const triggerPoint = scrollTop + (viewportHeight * 0.7); // Trigger when 70% down viewport
+
+        const shouldExpand = (scrollTop + rect.top) <= triggerPoint;
+
+        // Once expanded, keep it expanded (don't contract when scrolling past)
+        if (shouldExpand) {
+          setEnterBoringWorkScale(1.3);
+          setEnterBoringWorkTranslateY(0);
+        }
       }
     };
 
@@ -301,7 +324,7 @@ const BoringWorkLanding = () => {
             {/* Section Header */}
            
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               {/* Card 1: Custom Workflow Automations */}
               <motion.div 
                 className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-lime-300/60 relative overflow-hidden"
@@ -321,9 +344,6 @@ const BoringWorkLanding = () => {
                     <h3 className="text-xl font-bold text-gray-900 group-hover:text-lime-700 transition-colors duration-300">
                       Custom Workflow Automations
                     </h3>
-                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                      Eliminate repetitive tasks with reliable, time-saving automations that work 24/7.
-                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -347,9 +367,6 @@ const BoringWorkLanding = () => {
                     <h3 className="text-xl font-bold text-gray-900 group-hover:text-yellow-700 transition-colors duration-300">
                       Smart AI Integrations
                     </h3>
-                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                      Practical AI tools that enhance workflows, not complicate them. Simple and effective.
-                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -373,15 +390,12 @@ const BoringWorkLanding = () => {
                     <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors duration-300">
                       Seamless System Integration
                     </h3>
-                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                      Unify your software stack for smooth, cost-efficient operations. Everything connected.
-                    </p>
                   </div>
                 </div>
               </motion.div>
 
               {/* Card 4: Data Transformation & Insights */}
-              <motion.div 
+              <motion.div
                 className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-emerald-300/60 relative overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -390,7 +404,7 @@ const BoringWorkLanding = () => {
               >
                 {/* Gradient overlay on hover */}
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
+
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
                   <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                     <BarChart3 className="h-8 w-8 text-white" />
@@ -399,9 +413,29 @@ const BoringWorkLanding = () => {
                     <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors duration-300">
                       Data Transformation & Insights
                     </h3>
-                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
-                      Turn raw data into clear, actionable business intelligence that drives decisions.
-                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 5: Data Privacy & Security */}
+              <motion.div
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-blue-300/60 relative overflow-hidden"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <Shield className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
+                      Data Privacy & Security
+                    </h3>
                   </div>
                 </div>
               </motion.div>
@@ -430,7 +464,7 @@ const BoringWorkLanding = () => {
           </div>
 
           {/* Combined Problem & Understanding - Redesigned Layout */}
-          <div ref={dailyGrindRef} className="relative mb-24">
+          <div ref={dailyGrindRef} className="relative mb-4">
             {/* Top Section - Image Left, List Right */}
             <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
               {/* Image - Flush Left */}
@@ -577,104 +611,315 @@ const BoringWorkLanding = () => {
           </div>
         </div>
       </section>
+    
+      {/* What We Do - Solutions Section */}
+      <section className="relative bg-gradient-to-br from-lime-50 via-yellow-50 to-orange-50 py-24 lg:py-20 overflow-hidden">
+        {/* Creative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-lime-200/20 to-yellow-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-yellow-200/15 to-orange-200/15 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-200/10 to-lime-200/10 rounded-full blur-3xl"></div>
+        </div>
+        <div ref={enterBoringWorkRef} className="text-center mb-40 mt-00">
+            <h2
+              className="text-2xl lg:text-6xl font-bold text-gray-900 transition-transform duration-75 ease-out"
+              style={{
+                transform: `scale(${enterBoringWorkScale}) translateY(${enterBoringWorkTranslateY}px)`,
+                transformOrigin: 'center'
+              }}
+            >
+              Enter Boring<span className="text-blue-500">Work</span>.
+            </h2>
+          </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            
+            <p className="text-xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-bold">
+              We <span className="text-yellow-00 font-bold">untangle the mess</span> and automate the boring stuff.
+            </p>
+          </div>
 
-      {/* The Solution - Hope & Relief */}
-      <section className="py-24 lg:py-0">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-40 mt-00">
-            <h2 className="text-2xl lg:text-5xl font-bold text-gray-900">
-              Enter BoringWork.
+          {/* Main Content - Image Left, Content Right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+            {/* Left Column - Content */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+            >
+              <motion.div
+                className="text-center lg:text-left mb-12"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                
+              </motion.div>
+
+              <motion.h3
+                className="text-2xl lg:text-3xl font-bold text-gray-900 text-center lg:text-left"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                
+              </motion.h3>
+
+              <motion.div
+                className="space-y-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                 <div className="flex items-start space-x-4">
+                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                   </div>
+                   <div>
+                     <h4 className="text-2xl font-bold text-gray-900 mb-2">
+                       Repetitive Tasks → Automated
+                     </h4>
+                     <p className="text-gray-700 leading-relaxed">
+                       Invoices, emails, calendar bookings? Gone from your to-do list.
+                     </p>
+                   </div>
+                 </div>
+
+                 <div className="flex items-start space-x-4">
+                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                   </div>
+                   <div>
+                     <h4 className="text-2xl font-bold text-gray-900 mb-2">
+                       Smart AI → Where It Actually Helps
+                     </h4>
+                     <p className="text-gray-700 leading-relaxed">
+                       We don't just throw AI at your business. We integrate it where it saves time—and skip it where it complicates things.
+                     </p>
+                   </div>
+                 </div>
+
+                 <div className="flex items-start space-x-4">
+                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                   </div>
+                   <div>
+                     <h4 className="text-2xl font-bold text-gray-900 mb-2">
+                       Disconnected Tools → Unified System
+                     </h4>
+                     <p className="text-gray-700 leading-relaxed">
+                       Your apps and platforms finally work together. No more double-handling.
+                     </p>
+                   </div>
+                 </div>
+
+                 <div className="flex items-start space-x-4">
+                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                   </div>
+                   <div>
+                     <h4 className="text-2xl font-bold text-gray-900 mb-2">
+                       Messy Data → Instant Insights
+                     </h4>
+                     <p className="text-gray-700 leading-relaxed">
+                       We turn raw info into clear dashboards, summaries, and daily reports.
+                     </p>
+                   </div>
+                 </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Right Column - Image */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+            >
+               <div className="relative">
+                 <div className="absolute -top-4 -left-4 w-72 h-72 bg-gradient-to-br from-lime-200/30 to-yellow-200/30 rounded-full blur-3xl"></div>
+                 <img
+                   src={automationsImage}
+                   alt="3D illustration of automated business processes and integrations"
+                   className="relative z-10 w-full h-auto object-contain"
+                 />
+               </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+   
+      {/* Life After BoringWork Section */}
+      <section className="relative bg-gradient-to-b from-lime-50 to-green-200 py-24 lg:py-40 overflow-hidden">
+        {/* Creative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-lime-200/20 to-emerald-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-emerald-200/15 to-green-200/15 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-green-200/10 to-emerald-200/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Hero Introduction */}
+          <div ref={enterBoringWorkRef} className="text-center mb-20">
+            <h2
+              className="text-2xl lg:text-6xl font-bold text-gray-900 transition-transform duration-75 ease-out"
+              style={{
+                transform: `scale(${enterBoringWorkScale}) translateY(${enterBoringWorkTranslateY}px)`,
+                transformOrigin: 'center'
+              }}
+            >
+              Life after Boring<span className="text-blue-500">Work</span>.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            <div ref={heresWhatChangesRef}>
-              <div className={`bg-white/90 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-lime-100/50 relative overflow-hidden transition-all duration-500 ease-out ${
-                  heresWhatChangesSectionExpanded
-                    ? 'transform scale-110 shadow-3xl'
-                    : 'transform scale-100'
-                }`}>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-green-500"></div>
-
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-2xl">✨</span>
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">Here's what changes</h3>
-                    <p className="text-lime-600 font-semibold">when you stop working harder and start working smarter:</p>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-lime-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-lime-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      <span className="font-semibold text-gray-900">90% less manual work</span> – we automate the repetitive stuff.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-lime-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-lime-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      <span className="font-semibold text-gray-900">Everything syncs</span> – finally, your tools play nicely.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-lime-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-lime-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      <span className="font-semibold text-gray-900">You grow, not grind</span> – more strategy, less scrambling.
-                    </p>
-                  </div>
-                </div>
+          {/* Main Content Grid - Image and Text */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Image */}
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+            >
+              <div className="relative -mt-36">
+                <div className="absolute -top-4 -left-4 w-72 h-72 bg-gradient-to-br from-lime-200/30 to-emerald-200/30 rounded-full blur-3xl"></div>
+                <img
+                  src={relievedmanImage}
+                  alt="Relieved business owner enjoying free time"
+                  className="relative z-10 w-full h-auto object-contain"
+                />
               </div>
-            </div>
+            </motion.div>
 
-            <div ref={perfectDayRef} className="relative">
-              <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-br from-lime-200/30 to-green-200/30 rounded-full blur-3xl"></div>
-              <div className={`relative bg-gradient-to-br from-lime-50 to-green-50 rounded-3xl p-12 shadow-2xl border border-lime-100/30 transition-all duration-500 ease-out ${
-                perfectDaySectionExpanded
-                  ? 'transform scale-110 shadow-3xl'
-                  : 'transform scale-100'
-                }`}>
-                <h3 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                  Imagine Your <span className="text-lime-600">Perfect</span> Day
-                </h3>
-                <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                  You wake up to find routine tasks already handled. No emails piled up. No spreadsheets begging for attention. No bouncing between software. Just one cohesive system humming quietly in the background — while you focus on big-picture moves.
+            {/* Right Column - Content */}
+            <motion.div
+              className="space-y-8"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+            >
+              <motion.h3
+                className="text-3xl lg:text-4xl font-bold text-gray-900"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                Suddenly you have free time.
+              </motion.h3>
+
+              <motion.div
+                className="space-y-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 1.0, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    <strong>Comprehensive status reports</strong> magically appear in your inbox overnight.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 1.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Those documents <strong>somehow sorted themselves</strong>.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    The invoices have been <strong>automatically filled</strong> and are <strong>awaiting your approval</strong>.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                >
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <p className="text-2xl text-gray-700 leading-relaxed">
+                    <strong>Hours of boring work</strong> - done before you even opened up your laptop.
+                  </p>
+                </motion.div>
+              </motion.div>
+
+              <motion.div
+                className="pt-8"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                <p className="text-2xl font-bold text-gray-900 mb-4">
+                  The only problem?
                 </p>
 
-                <div className="grid grid-cols-2 gap-6 mb-8">
-                  <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                    <div className="text-3xl mb-3">🎯</div>
-                    <p className="text-gray-900 font-semibold">Strategic work only</p>
-                  </div>
-                  <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                    <div className="text-3xl mb-3">💰</div>
-                    <p className="text-gray-900 font-semibold">Bigger margins</p>
-                  </div>
-                  <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                    <div className="text-3xl mb-3">😊</div>
-                    <p className="text-gray-900 font-semibold">Less stress</p>
-                  </div>
-                  <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                    <div className="text-3xl mb-3">👨‍👩‍👧‍👦</div>
-                    <p className="text-gray-900 font-semibold">Weekends with your family, not your laptop</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                <motion.h3
+                  className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                >
+                  How to spend your free time wisely.
+                </motion.h3>
+
+                <motion.p
+                  className="text-xl text-gray-700 leading-relaxed"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  viewport={{ once: true }}
+                >
+                  This isn't someday. It's the reality of every business owner that chooses to automate.
+                </motion.p>
+              </motion.div>
+            </motion.div>
           </div>
 
-          <div className="text-center mt-24">
-            <h4 className="text-2xl lg:text-3xl font-bold text-gray-900">
+          <div className="text-center mt-20">
+            <h4 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">
               Ready to win back your time?
             </h4>
           </div>
@@ -683,7 +928,7 @@ const BoringWorkLanding = () => {
           <div className="text-center mt-16">
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-lime-500 hover:bg-lime-600 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                Get your Free Audit
+                Schedule a Consult
               </button>
               <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
                 See Our Success Stories
