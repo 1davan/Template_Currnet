@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, ChevronLeft, ChevronRight, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Bot, ChevronLeft, ChevronRight, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall, Workflow, Cpu, Link, BarChart3 } from 'lucide-react';
 import manImage from '../assets/man.png';
+import busymanImage from '../assets/busyman.png';
 import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
 import redOxLogo from '../assets/Capture.JPG';
@@ -58,11 +60,23 @@ const BoringWorkLanding = () => {
     if (!isAutoPlaying || isDragging) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+      setCurrentIndex((prevIndex) => prevIndex + 1);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, isDragging, testimonials.length]);
+  }, [isAutoPlaying, isDragging]);
+
+  // Infinite scroll logic - reset to beginning when reaching duplicates
+  useEffect(() => {
+    if (currentIndex >= testimonials.length) {
+      // Use setTimeout to reset without animation after the transition completes
+      const timer = setTimeout(() => {
+        setCurrentIndex(0);
+      }, 500); // Match the transition duration
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, testimonials.length]);
 
   // Scroll animation based on viewport middle trigger
   useEffect(() => {
@@ -75,14 +89,15 @@ const BoringWorkLanding = () => {
       if (dailyGrindRef.current) {
         const element = dailyGrindRef.current;
         const rect = element.getBoundingClientRect();
-        const elementBottom = scrollTop + rect.bottom;
-        const elementBottomQuarter = elementBottom - (rect.height / 4);
 
         // Trigger expansion when section top reaches 60% of viewport height (early trigger)
         const triggerPoint = scrollTop + (viewportHeight * 0.6);
-        const shouldExpand = (scrollTop + rect.top) <= triggerPoint && elementBottom >= (scrollTop + viewportMiddle);
+        const shouldExpand = (scrollTop + rect.top) <= triggerPoint;
 
-        setDailyGrindSectionExpanded(shouldExpand);
+        // Once expanded, keep it expanded (don't hide when scrolling past)
+        if (shouldExpand) {
+          setDailyGrindSectionExpanded(true);
+        }
       }
 
       // Check We've Been There section (later trigger - 75%)
@@ -177,13 +192,18 @@ const BoringWorkLanding = () => {
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    setCurrentIndex((prevIndex) => prevIndex + 1);
     setIsAutoPlaying(false);
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+    setCurrentIndex((prevIndex) => {
+      if (prevIndex <= 0) {
+        return testimonials.length - 1;
+      }
+      return prevIndex - 1;
+    });
     setIsAutoPlaying(false);
     setTimeout(() => setIsAutoPlaying(true), 10000);
   };
@@ -244,10 +264,9 @@ const BoringWorkLanding = () => {
                   <br />
                   <span className="text-gray-700">Busywork.</span>
                   <br />
-                  <span className="text-gray-900">Hello Smart Work</span>
                 </h1>
 
-                <p className="text-lg lg:text-xl text-gray-600 max-w-lg">
+                <p className="text-lg lg:text-2xl text-gray-800 max-w-lg">
                   Tailored AI & Automation Solutions for Your Business
                 </p>
               </div>
@@ -255,7 +274,7 @@ const BoringWorkLanding = () => {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <button className="bg-lime-500 hover:bg-lime-600 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                  Schedule a Demo
+                  Schedule a Consult
                 </button>
                 <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
                   See Our Success Stories
@@ -272,6 +291,122 @@ const BoringWorkLanding = () => {
               />
             </div>
           </div>
+          <div className="flex items-mid justify-center mt-20 mb-10 text-lg font-semibold text-gray-500 tracking-wide">
+          <p className="text-2xl lg:text-3xl font-bold text-gray-900">
+                  We help you get your life back.
+                </p>
+                </div>
+          {/* Core Services Cards */}
+          <div className="mt-20 relative z-30">
+            {/* Section Header */}
+           
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {/* Card 1: Custom Workflow Automations */}
+              <motion.div 
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-lime-300/60 relative overflow-hidden"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-lime-50/50 to-lime-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-lime-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <Workflow className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-lime-700 transition-colors duration-300">
+                      Custom Workflow Automations
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      Eliminate repetitive tasks with reliable, time-saving automations that work 24/7.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 2: Smart AI Integrations */}
+              <motion.div 
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-yellow-300/60 relative overflow-hidden"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-yellow-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <Brain className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-yellow-700 transition-colors duration-300">
+                      Smart AI Integrations
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      Practical AI tools that enhance workflows, not complicate them. Simple and effective.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 3: Seamless System Integration */}
+              <motion.div 
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-orange-300/60 relative overflow-hidden"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <Link className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors duration-300">
+                      Seamless System Integration
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      Unify your software stack for smooth, cost-efficient operations. Everything connected.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Card 4: Data Transformation & Insights */}
+              <motion.div 
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-emerald-300/60 relative overflow-hidden"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center space-y-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <BarChart3 className="h-8 w-8 text-white" />
+                  </div>
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors duration-300">
+                      Data Transformation & Insights
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                      Turn raw data into clear, actionable business intelligence that drives decisions.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -286,128 +421,179 @@ const BoringWorkLanding = () => {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Hero Introduction - Problem Setup */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center space-x-4 bg-white/80 backdrop-blur-xl rounded-full px-8 py-4 shadow-lg mb-8">
+          <div className="text-center mb-10">
               <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                Swamped with busywork? Can't find time to GROW your business?
+              Let's be honest. <br /> <br />  <br />Success brings  <span className="text-orange-600">more admin</span> than you ever asked for.
               </h2>
-            </div>
 
-            <div className="max-w-4xl mx-auto">
-              <p className="text-xl lg:text-2xl text-gray-700 leading-relaxed font-medium">
-                Let's be honest — success brings more admin than you ever asked for.
-              </p>
-            </div>
+           
           </div>
 
-          {/* The Problem - Visual Impact */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-24">
-            <div ref={dailyGrindRef} className="order-2 lg:order-1">
-              <div className={`bg-white/90 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-orange-100/50 relative overflow-hidden transition-all duration-500 ease-out ${
-                dailyGrindSectionExpanded
-                  ? 'transform scale-110 shadow-3xl'
-                  : 'transform scale-100'
-              }`}>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
-
-                <div className="flex items-center space-x-4 mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-2xl">😫</span>
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-gray-900 mb-2">The Daily Grind</h3>
-                    <p className="text-orange-600 font-semibold">Sound familiar?</p>
-                  </div>
+          {/* Combined Problem & Understanding - Redesigned Layout */}
+          <div ref={dailyGrindRef} className="relative mb-24">
+            {/* Top Section - Image Left, List Right */}
+            <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
+              {/* Image - Flush Left */}
+              <motion.div
+                className="flex-shrink-0"
+                initial={{ opacity: 0, x: -50 }}
+                animate={dailyGrindSectionExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <div className="w-full max-w-md">
+                  <img
+                    src={busymanImage}
+                    alt="Stressed business owner overwhelmed with paperwork and tasks"
+                    className="w-full h-auto object-cover rounded-r-lg"
+                  />
                 </div>
+              </motion.div>
 
-                <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      <span className="font-semibold text-gray-900">Never-ending tasks:</span> emails, data entry, invoicing — rinse and repeat.
-                    </p>
+              {/* List - Right Side */}
+              <motion.div
+                className="flex-1 space-y-8 mt-20"
+                initial={{ opacity: 0, x: 50 }}
+                animate={dailyGrindSectionExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
                   </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      <span className="font-semibold text-gray-900">Tech overload:</span> juggling tools that don't talk to each other.
-                    </p>
-                  </div>
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">
-                      <span className="font-semibold text-gray-900">You're the bottleneck:</span> you want to lead, but you're buried in the weeds.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div ref={weveBeenThereRef} className="order-1 lg:order-2">
-              <div className="relative">
-                <div className="bottom -top-4 -left-4 w-72 h-72 bg-gradient-to-br from-yellow-200/30 to-orange-200/30 rounded-full blur-3xl"></div>
-                <div className={`relative bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl p-12 shadow-2xl border border-orange-100/30 transition-all duration-500 ease-out ${
-                  weveBeenThereSectionExpanded
-                    ? 'transform scale-110 shadow-3xl'
-                    : 'transform scale-100'
-                }`}>
-                  <h3 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                    We've been <span className="text-orange-600">there.</span>
-                  </h3>
-                  <p className="text-xl text-gray-700 leading-relaxed mb-8">
-                    Most business owners inevitably reach this point. We've been there too and tried every tool on the market.
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    <span className="text-gray-900">To-do lists that just get bigger and bigger</span>.
                   </p>
+                </motion.div>
 
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                      <div className="text-3xl mb-3">😴</div>
-                      <p className="text-gray-900 font-semibold">Late nights working</p>
-                    </div>
-                    <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                      <div className="text-3xl mb-3">😤</div>
-                      <p className="text-gray-900 font-semibold">Drowning in to-dos</p>
-                    </div>
-                    <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                      <div className="text-3xl mb-3">💸</div>
-                      <p className="text-gray-900 font-semibold">Tools that don't pull their weight</p>
-                    </div>
-                    <div className="bg-white/80 rounded-2xl p-6 shadow-lg">
-                      <div className="text-3xl mb-3">⏱️</div>
-                      <p className="text-gray-900 font-semibold">Missing out on real life</p>
-                    </div>
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Not delegating things for a fear it won't be done right.
+                  </p>
+                </motion.div>
 
-          {/* The Solution - Hope & Relief */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center space-x-4 bg-white/80 backdrop-blur-xl rounded-full px-8 py-4 shadow-lg mb-8">
-              <div className="w-12 h-12 bg-gradient-to-br from-lime-400 to-green-500 rounded-full flex items-center justify-center">
-                <div className="w-6 h-6 bg-white rounded-full"></div>
-              </div>
-              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                ✨ Enter: Smart Automation
-              </h2>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 1.0, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Your "CRM" is a messy Excel file you're too scared to open.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 1.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    You're the CEO, but also the receptionist, bookkeeper, admin assistant.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  </div>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Wondering if this is really what being your own boss looks like.
+                  </p>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-start space-x-4"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.6, delay: 1.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                    <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                  </div>
+                  <p className="text-2xl text-gray-700 leading-relaxed font-bold">
+                    You want more leads, but you're <span className="underline">stuck in the weeds</span>.
+                  </p>
+                </motion.div>
+              </motion.div>
             </div>
+
+            {/* Bottom Section - Centered Text */}
+            <motion.div
+              className="text-center max-w-4xl mx-auto"
+              initial={{ opacity: 0, y: 50 }}
+              animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 0.6, delay: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <motion.h3
+                className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8"
+                initial={{ opacity: 0, y: 30 }}
+                animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.8, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                We understand the <span className="text-orange-600">pain.</span>
+              </motion.h3>
+
+              <motion.div
+                className="space-y-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                transition={{ duration: 0.6, delay: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <p className="text-xl text-gray-700 leading-relaxed">
+                  <strong>Most business owners eventually hit this wall.</strong>
+                </p>
+
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  We know the struggle because we've lived it too, <strong>and built solutions that <span className="text-orange-600 underline font-semibold">crush it</span></strong>.
+                </p>
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Solution - Hope & Relief */}
+      <section className="py-24 lg:py-0">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-40 mt-00">
+            <h2 className="text-2xl lg:text-5xl font-bold text-gray-900">
+              Enter BoringWork.
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div ref={heresWhatChangesRef}>
               <div className={`bg-white/90 backdrop-blur-xl rounded-3xl p-10 shadow-2xl border border-lime-100/50 relative overflow-hidden transition-all duration-500 ease-out ${
-                heresWhatChangesSectionExpanded
-                  ? 'transform scale-110 shadow-3xl'
-                  : 'transform scale-100'
-              }`}>
+                  heresWhatChangesSectionExpanded
+                    ? 'transform scale-110 shadow-3xl'
+                    : 'transform scale-100'
+                }`}>
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-green-500"></div>
 
                 <div className="flex items-center space-x-4 mb-8">
@@ -452,12 +638,12 @@ const BoringWorkLanding = () => {
             </div>
 
             <div ref={perfectDayRef} className="relative">
-              <div className="bottom -top-4 -right-4 w-72 h-72 bg-gradient-to-br from-lime-200/30 to-green-200/30 rounded-full blur-3xl"></div>
+              <div className="absolute -top-4 -right-4 w-72 h-72 bg-gradient-to-br from-lime-200/30 to-green-200/30 rounded-full blur-3xl"></div>
               <div className={`relative bg-gradient-to-br from-lime-50 to-green-50 rounded-3xl p-12 shadow-2xl border border-lime-100/30 transition-all duration-500 ease-out ${
                 perfectDaySectionExpanded
                   ? 'transform scale-110 shadow-3xl'
                   : 'transform scale-100'
-              }`}>
+                }`}>
                 <h3 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
                   Imagine Your <span className="text-lime-600">Perfect</span> Day
                 </h3>
@@ -483,16 +669,15 @@ const BoringWorkLanding = () => {
                     <p className="text-gray-900 font-semibold">Weekends with your family, not your laptop</p>
                   </div>
                 </div>
-
-                
               </div>
             </div>
           </div>
+
           <div className="text-center mt-24">
-                  <h4 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                    Ready to win back your time?
-                  </h4>
-                </div>
+            <h4 className="text-2xl lg:text-3xl font-bold text-gray-900">
+              Ready to win back your time?
+            </h4>
+          </div>
 
           {/* CTA Section */}
           <div className="text-center mt-16">
@@ -505,9 +690,9 @@ const BoringWorkLanding = () => {
               </button>
             </div>
           </div>
-
         </div>
       </section>
+
 
       {/* Testimonials Carousel Section */}
       <section className="py-0 bg-gray-50">
@@ -553,7 +738,7 @@ const BoringWorkLanding = () => {
                 className="flex transition-transform duration-500 ease-in-out gap-8"
                 style={{
                   transform: `translateX(-${currentIndex * (100 / 3)}%)`,
-                  width: `${(testimonials.length * 100) / 3}%`
+                  width: `${(testimonials.length * 2 * 100) / 3}%`
                 }}
               >
                 {testimonials.map((testimonial, index) => (
