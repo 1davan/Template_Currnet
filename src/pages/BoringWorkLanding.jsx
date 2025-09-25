@@ -5,6 +5,16 @@ import manImage from '../assets/man.png';
 import busymanImage from '../assets/busyman.png';
 import automationsImage from '../assets/Automations.png';
 import relievedmanImage from '../assets/relievedman.png';
+import boringrobotImage from '../assets/boringrobot.png';
+import smilingrobot2Image from '../assets/smilingrobot2.png';
+import smilingrobotImage from '../assets/smilingrobot.png';
+import seriousrobotImage from '../assets/seriousrobot.png';
+import gradient1Image from '../assets/gradient1.png';
+import shieldIcon from '../assets/11.png';
+import seamlessintegrationIcon from '../assets/12.png';
+import datainsightsIcon from '../assets/13.png';
+import customworkflowIcon from '../assets/14.png';
+import aiintegrationIcon from '../assets/15.png';
 import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
 import redOxLogo from '../assets/Capture.JPG';
@@ -50,15 +60,16 @@ const BoringWorkLanding = () => {
   const [weveBeenThereSectionExpanded, setWeveBeenThereSectionExpanded] = useState(false);
   const [heresWhatChangesSectionExpanded, setHeresWhatChangesSectionExpanded] = useState(false);
   const [perfectDaySectionExpanded, setPerfectDaySectionExpanded] = useState(false);
-  const [enterBoringWorkScale, setEnterBoringWorkScale] = useState(1);
-  const [enterBoringWorkTranslateY, setEnterBoringWorkTranslateY] = useState(50);
+  const [enterBoringWorkExpanded, setEnterBoringWorkExpanded] = useState(false);
+  const [lifeAfterBoringWorkExpanded, setLifeAfterBoringWorkExpanded] = useState(false);
 
-  // Refs for the 4 main sections
+  // Refs for the main sections
   const dailyGrindRef = useRef(null);
   const weveBeenThereRef = useRef(null);
   const heresWhatChangesRef = useRef(null);
   const perfectDayRef = useRef(null);
   const enterBoringWorkRef = useRef(null);
+  const lifeAfterBoringWorkRef = useRef(null);
 
   // Auto-play functionality
   useEffect(() => {
@@ -157,9 +168,25 @@ const BoringWorkLanding = () => {
         const shouldExpand = (scrollTop + rect.top) <= triggerPoint;
 
         // Once expanded, keep it expanded (don't contract when scrolling past)
-        if (shouldExpand) {
-          setEnterBoringWorkScale(1.3);
-          setEnterBoringWorkTranslateY(0);
+        if (shouldExpand && !enterBoringWorkExpanded) {
+          setEnterBoringWorkExpanded(true);
+        }
+      }
+
+      // Check Life After BoringWork section - expand when scrolled to
+      if (lifeAfterBoringWorkRef.current) {
+        const element = lifeAfterBoringWorkRef.current;
+        const rect = element.getBoundingClientRect();
+
+        // Trigger expansion when section enters viewport
+        const viewportHeight = window.innerHeight;
+        const triggerPoint = scrollTop + (viewportHeight * 0.7); // Trigger when 70% down viewport
+
+        const shouldExpand = (scrollTop + rect.top) <= triggerPoint;
+
+        // Once expanded, keep it expanded (don't contract when scrolling past)
+        if (shouldExpand && !lifeAfterBoringWorkExpanded) {
+          setLifeAfterBoringWorkExpanded(true);
         }
       }
     };
@@ -250,10 +277,17 @@ const BoringWorkLanding = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                <Bot className="h-6 w-6 text-white" />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img 
+                  src={boringrobotImage} 
+                  alt="BoringWork Robot Logo" 
+                  className="w-12 h-12 object-contain"
+                />
               </div>
-              <span className="text-xl font-bold text-gray-900">BoringWork</span>
+              <span className="text-xl font-bold">
+                <span className="text-gray-900">Boring</span>
+                <span className="text-blue-500">Work</span>
+              </span>
             </div>
 
             {/* Navigation */}
@@ -263,14 +297,35 @@ const BoringWorkLanding = () => {
           </div>
         </div>
       </header>
-
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-lime-50 via-yellow-50 to-orange-50 py-20 lg:py-32 overflow-hidden">
-        {/* Parallelogram within hero section */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute bottom-0 left-0 z-5"
+      <section 
+        className="relative py-20 lg:py-32 overflow-hidden"
+        style={{
+          background: `
+            linear-gradient(135deg, transparent 0px, transparent 9px, rgba(156, 163, 175, 0) 9px, rgba(156, 163, 175, 0) 10px, transparent 10px, transparent 19px, rgba(156, 163, 175, 0) 19px, rgba(156, 163, 175, 0) 20px),
+            linear-gradient(to bottom, 
+              rgba(240, 253, 244, 0.1) 0%, 
+              rgba(254, 243, 199, 0.1) 30%, 
+              rgba(255, 237, 213, 0.1) 60%,
+              rgba(255, 237, 213, 0.3) 100%
+            ),
+            linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+            url(${gradient1Image})
+          `,
+          backgroundSize: '20px 20px, 100% 100%, 100% 100%, cover',
+          backgroundPosition: '0 0, 0 0, 0 0, center'
+        }}
+      >
+        {/* Diagonal Lines Fade-in Overlay */}
+        <div 
+          className="absolute inset-0 w-full h-full z-0"
+          style={{
+            background: `repeating-linear-gradient(135deg, transparent, transparent 9px, rgba(156, 163, 175, 0.04) 9px, rgba(156, 163, 175, 0.04) 10px)`,
+            mask: `linear-gradient(to bottom, transparent 0%, transparent 66.67%, black 100%)`,
+            WebkitMask: `linear-gradient(to bottom, transparent 0%, transparent 20.67%, black 100%)`
+          }}
         />
+        {/* Current Background with 90% transparency */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative z-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Text Content */}
@@ -285,7 +340,7 @@ const BoringWorkLanding = () => {
                 <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight text-gray-900">
                   Say Goodbye to
                   <br />
-                  <span className="text-gray-700">Busywork.</span>
+                  <span className="text-orange-500">Busywork</span>.
                   <br />
                 </h1>
 
@@ -296,145 +351,166 @@ const BoringWorkLanding = () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-lime-500 hover:bg-lime-600 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                <button 
+                  className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                  style={{
+                    backgroundColor: '#1a6388',
+                    boxShadow: '0 4px 14px 0 rgba(26, 99, 136, 0.39)'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#145066'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#1a6388'}
+                >
                   Schedule a Consult
                 </button>
-                <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                <button 
+                  className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                  style={{
+                    backgroundColor: '#ea7a2c'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#d16a1f'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#ea7a2c'}
+                >
                   See Our Success Stories
                 </button>
               </div>
             </div>
-
             {/* Right Column - Hero Image */}
             <div className="relative z-30">
               <img
                 src={manImage}
                 alt="Professional man using tablet in modern kitchen workspace"
                 className="relative z-40 w-full h-auto object-contain"
+                style={{ left: '-24px' }}
+              />
+              {/* Overlapping Smiling Robot Image */}
+              <img
+                src={smilingrobot2Image}
+                alt="Smiling robot mascot"
+                className="absolute -bottom-10 z-50 h-[280px] w-auto object-contain"
+                style={{ right: '-124px' }}
               />
             </div>
           </div>
           <div className="flex items-mid justify-center mt-20 mb-10 text-lg font-semibold text-gray-500 tracking-wide">
-          <p className="text-2xl lg:text-3xl font-bold text-gray-900">
-                  We help you get your life back.
+          <p className="text-2xl lg:text-4xl font-bold text-gray-900">
+                  Boring<span className="text-blue-500">Work</span> helps you get your life back.
                 </p>
                 </div>
           {/* Core Services Cards */}
           <div className="mt-20 relative z-30">
             {/* Section Header */}
-           
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-              {/* Card 1: Custom Workflow Automations */}
+              {/* Card 1: Data Privacy & Security */}
               <motion.div 
-                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-lime-300/60 relative overflow-hidden"
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-blue-300/60 relative overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-lime-50/50 to-lime-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-lime-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <Workflow className="h-8 w-8 text-white" />
+                  <div className="w-24 h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <img src={shieldIcon} alt="Data Privacy & Security" className="w-full h-full object-contain" />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-lime-700 transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
                       Custom Workflow Automations
                     </h3>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Card 2: Smart AI Integrations */}
+              {/* Card 2: Seamless System Integration */}
               <motion.div 
-                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-yellow-300/60 relative overflow-hidden"
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-orange-300/60 relative overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-yellow-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <Brain className="h-8 w-8 text-white" />
+                  <div className="w-24 h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <img src={seamlessintegrationIcon} alt="Seamless System Integration" className="w-full h-full object-contain" />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-yellow-700 transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors duration-300">
                       Smart AI Integrations
                     </h3>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Card 3: Seamless System Integration */}
+              {/* Card 3: Data Transformation & Insights */}
               <motion.div 
-                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-orange-300/60 relative overflow-hidden"
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-emerald-300/60 relative overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-orange-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <Link className="h-8 w-8 text-white" />
+                  <div className="w-24 h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <img src={datainsightsIcon} alt="Data Transformation & Insights" className="w-full h-full object-contain" />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-orange-700 transition-colors duration-300">
-                      Seamless System Integration
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors duration-300">
+                      Seamless System Integrations
                     </h3>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Card 4: Data Transformation & Insights */}
+              {/* Card 4: Custom Workflow Automations */}
               <motion.div
-                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-emerald-300/60 relative overflow-hidden"
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-lime-300/60 relative overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-lime-50/50 to-lime-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <BarChart3 className="h-8 w-8 text-white" />
+                  <div className="w-24 h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <img src={customworkflowIcon} alt="Custom Workflow Automations" className="w-full h-full object-contain" />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-700 transition-colors duration-300">
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-lime-700 transition-colors duration-300">
                       Data Transformation & Insights
                     </h3>
                   </div>
                 </div>
               </motion.div>
 
-              {/* Card 5: Data Privacy & Security */}
+              {/* Card 5: Smart AI Integrations */}
               <motion.div
-                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-blue-300/60 relative overflow-hidden"
+                className="group bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 border border-white/20 hover:border-yellow-300/60 relative overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-blue-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-yellow-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                 <div className="relative z-10 flex flex-col items-center text-center space-y-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <Shield className="h-8 w-8 text-white" />
+                  <div className="w-24 h-24 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <img src={aiintegrationIcon} alt="Smart AI Integrations" className="w-full h-full object-contain" />
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
-                      Data Privacy & Security
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-yellow-700 transition-colors duration-300">
+                      Preserving Data Privacy & Security
                     </h3>
                   </div>
                 </div>
@@ -445,26 +521,33 @@ const BoringWorkLanding = () => {
       </section>
 
       {/* PAS Section - High Converting Flow */}
-      <section className="relative bg-gray-40 py-24 lg:py-40 overflow-hidden">
+      <section 
+        className="relative py-14 lg:py-20 overflow-hidden"
+        style={{
+          background: `
+            repeating-linear-gradient(135deg, transparent, transparent 9px, rgba(156, 163, 175, 0.04) 9px, rgba(156, 163, 175, 0.04) 10px),
+            linear-gradient(to bottom, #fafafa 0%,rgb(251, 250, 249) 30%,rgb(254, 228, 199) 70%, #fed7aa 100%)
+          `,
+          backgroundSize: '100% 100%'
+        }}
+      >
         {/* Creative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-lime-200/20 to-yellow-200/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-yellow-200/15 to-orange-200/15 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-200/10 to-lime-200/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-green-500/10 to-lime-200/10 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Hero Introduction - Problem Setup */}
           <div className="text-center mb-10">
-              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-              Let's be honest. <br /> <br />  <br />Success brings  <span className="text-orange-600">more admin</span> than you ever asked for.
+              <h2 className="text-xl lg:text-2xl font-bold text-gray-900">
+              Let's be honest. <br /> <br />  <br /><span className="text-3xl lg:text-3xl">Success brings  <span className="text-orange-600">more admin</span> than you ever asked for.</span>
               </h2>
 
            
           </div>
 
           {/* Combined Problem & Understanding - Redesigned Layout */}
-          <div ref={dailyGrindRef} className="relative mb-4">
+          <div ref={dailyGrindRef} className="relative mb-10">
             {/* Top Section - Image Left, List Right */}
             <div className="flex flex-col lg:flex-row items-start gap-12 mb-16">
               {/* Image - Flush Left */}
@@ -474,11 +557,21 @@ const BoringWorkLanding = () => {
                 animate={dailyGrindSectionExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                <div className="w-full max-w-md">
+                <div className="w-full max-w-md relative">
+                  {/* Subtle light orange blurred background */}
+                  <div
+                    className="absolute inset-0 rounded-r-lg opacity-20"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.08) 40%, transparent 70%)',
+                      filter: 'blur(40px)',
+                      transform: 'scale(1.1)',
+                      zIndex: 0
+                    }}
+                  />
                   <img
                     src={busymanImage}
                     alt="Stressed business owner overwhelmed with paperwork and tasks"
-                    className="w-full h-auto object-cover rounded-r-lg"
+                    className="relative z-10 w-full h-auto object-cover rounded-r-lg"
                   />
                 </div>
               </motion.div>
@@ -590,7 +683,7 @@ const BoringWorkLanding = () => {
                 animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.8, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                We understand the <span className="text-orange-600">pain.</span>
+                We understand the <span className="text-orange-600">pain.</span> <br /> <br /> 
               </motion.h3>
 
               <motion.div
@@ -599,9 +692,7 @@ const BoringWorkLanding = () => {
                 animate={dailyGrindSectionExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.6, delay: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                <p className="text-xl text-gray-700 leading-relaxed">
-                  <strong>Most business owners eventually hit this wall.</strong>
-                </p>
+             
 
                 <p className="text-lg text-gray-600 leading-relaxed">
                   We know the struggle because we've lived it too, <strong>and built solutions that <span className="text-orange-600 underline font-semibold">crush it</span></strong>.
@@ -613,30 +704,56 @@ const BoringWorkLanding = () => {
       </section>
     
       {/* What We Do - Solutions Section */}
-      <section className="relative bg-gradient-to-br from-lime-50 via-yellow-50 to-orange-50 py-24 lg:py-20 overflow-hidden">
+      <section 
+        className="relative py-24 lg:py-20 overflow-hidden"
+        style={{
+          background: `
+            repeating-linear-gradient(135deg, transparent, transparent 9px, rgba(156, 163, 175, 0.04) 9px, rgba(156, 163, 175, 0.04) 10px),
+            linear-gradient(to bottom, #fed7aa 0%, #fef3c7 30%, #f0fdf4 70%, #dcfce7 100%)
+          `,
+          backgroundSize: '100% 100%'
+        }}
+      >
         {/* Creative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-lime-200/20 to-yellow-200/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-yellow-200/15 to-orange-200/15 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-200/10 to-lime-200/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-yellow-200/15 to-green-500/15 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-green-500/10 to-lime-200/10 rounded-full blur-3xl"></div>
         </div>
-        <div ref={enterBoringWorkRef} className="text-center mb-40 mt-00">
-            <h2
-              className="text-2xl lg:text-6xl font-bold text-gray-900 transition-transform duration-75 ease-out"
-              style={{
-                transform: `scale(${enterBoringWorkScale}) translateY(${enterBoringWorkTranslateY}px)`,
-                transformOrigin: 'center'
-              }}
-            >
-              Enter Boring<span className="text-blue-500">Work</span>.
-            </h2>
+        <div ref={enterBoringWorkRef} className="text-center mb-40 mt-10">
+            <div className="flex items-center justify-center gap-20">
+              <motion.img
+                src={seriousrobotImage}
+                alt="Serious robot mascot with cape and wrench"
+                className="w-32 h-20 lg:w-40 lg:h-40 object-contain"
+                initial={{ opacity: 0, x: -50 }}
+                animate={enterBoringWorkExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              />
+              <motion.h2
+                className="text-2xl lg:text-6xl font-bold text-gray-900"
+                initial={{ opacity: 0, scale: 0.8, y: -50 }}
+                animate={enterBoringWorkExpanded ? { opacity: 1, scale: 1.2, y: 0 } : { opacity: 0, scale: 0.8, y: -50 }}
+                transition={{ duration: 1, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                style={{
+                  transformOrigin: 'center'
+                }}
+              >
+                Enter Boring<span className="text-blue-500">Work</span>.
+              </motion.h2>
+            </div>
           </div>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-20">
             
-            <p className="text-xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-bold">
-              We <span className="text-yellow-00 font-bold">untangle the mess</span> and automate the boring stuff.
-            </p>
+            <motion.p 
+              className="text-xl lg:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-bold"
+              initial={{ opacity: 0, y: 30 }}
+              animate={enterBoringWorkExpanded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              We <span className="text-yellow-00 font-bold">untangle the mess</span> and <span className="text-blue-500 font-bold">automate </span>the boring stuff.
+            </motion.p>
           </div>
 
           {/* Main Content - Image Left, Content Right */}
@@ -677,8 +794,8 @@ const BoringWorkLanding = () => {
                 viewport={{ once: true }}
               >
                  <div className="flex items-start space-x-4">
-                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                   <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                    </div>
                    <div>
                      <h4 className="text-2xl font-bold text-gray-900 mb-2">
@@ -691,22 +808,22 @@ const BoringWorkLanding = () => {
                  </div>
 
                  <div className="flex items-start space-x-4">
-                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                 <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                    </div>
                    <div>
                      <h4 className="text-2xl font-bold text-gray-900 mb-2">
                        Smart AI → Where It Actually Helps
                      </h4>
                      <p className="text-gray-700 leading-relaxed">
-                       We don't just throw AI at your business. We integrate it where it saves time—and skip it where it complicates things.
+                       We don't just throw AI at your business. We integrate it where it saves time and skip it where it complicates things.
                      </p>
                    </div>
                  </div>
 
                  <div className="flex items-start space-x-4">
-                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                 <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                 <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                    </div>
                    <div>
                      <h4 className="text-2xl font-bold text-gray-900 mb-2">
@@ -719,8 +836,8 @@ const BoringWorkLanding = () => {
                  </div>
 
                  <div className="flex items-start space-x-4">
-                   <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                 <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                     <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                    </div>
                    <div>
                      <h4 className="text-2xl font-bold text-gray-900 mb-2">
@@ -756,26 +873,46 @@ const BoringWorkLanding = () => {
       </section>
    
       {/* Life After BoringWork Section */}
-      <section className="relative bg-gradient-to-b from-lime-50 to-green-200 py-24 lg:py-40 overflow-hidden">
+      <section 
+        className="relative py-24 lg:py-10 overflow-hidden"
+        style={{
+          background: `
+            repeating-linear-gradient(135deg, transparent, transparent 9px, rgba(156, 163, 175, 0.04) 9px, rgba(156, 163, 175, 0.04) 10px),
+             linear-gradient(to bottom, #dcfce7 0%, #f0fdf4 30%, #fef3c7 70%, #fed7aa 100%)
+          `,
+          backgroundSize: '100% 100%'
+        }}
+      >
         {/* Creative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-lime-200/20 to-emerald-200/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-tl from-emerald-200/15 to-green-200/15 rounded-full blur-3xl"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-green-200/10 to-emerald-200/10 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Hero Introduction */}
-          <div ref={enterBoringWorkRef} className="text-center mb-20">
-            <h2
-              className="text-2xl lg:text-6xl font-bold text-gray-900 transition-transform duration-75 ease-out"
-              style={{
-                transform: `scale(${enterBoringWorkScale}) translateY(${enterBoringWorkTranslateY}px)`,
-                transformOrigin: 'center'
-              }}
-            >
-              Life after Boring<span className="text-blue-500">Work</span>.
-            </h2>
+          <div ref={lifeAfterBoringWorkRef} className="text-center mb-20">
+            <div className="flex items-center justify-center gap-20">
+              <motion.img
+                src={smilingrobotImage}
+                alt="Smiling robot mascot"
+                className="w-32 h-32 lg:w-40 lg:h-40 object-contain"
+                initial={{ opacity: 0, x: -50 }}
+                animate={lifeAfterBoringWorkExpanded ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              />
+              <motion.h2
+                className="text-2xl lg:text-6xl font-bold text-gray-900"
+                initial={{ opacity: 0, scale: 0.8, y: -50 }}
+                animate={lifeAfterBoringWorkExpanded ? { opacity: 1, scale: 1.2, y: 0 } : { opacity: 0, scale: 0.8, y: -50 }}
+                transition={{ duration: 1, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                style={{
+                  transformOrigin: 'center'
+                }}
+              >
+                Life after Boring<span className="text-blue-500">Work</span>.
+              </motion.h2>
+            </div>
           </div>
 
           {/* Main Content Grid - Image and Text */}
@@ -788,8 +925,7 @@ const BoringWorkLanding = () => {
               transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
               viewport={{ once: true }}
             >
-              <div className="relative -mt-36">
-                <div className="absolute -top-4 -left-4 w-72 h-72 bg-gradient-to-br from-lime-200/30 to-emerald-200/30 rounded-full blur-3xl"></div>
+              <div className="relative -mt-40">
                 <img
                   src={relievedmanImage}
                   alt="Relieved business owner enjoying free time"
@@ -864,7 +1000,7 @@ const BoringWorkLanding = () => {
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                   </div>
                   <p className="text-xl text-gray-700 leading-relaxed">
-                    The invoices have been <strong>automatically filled</strong> and are <strong>awaiting your approval</strong>.
+                    The invoices have been <strong>pre-filled</strong> and are <strong>awaiting your approval</strong>.
                   </p>
                 </motion.div>
 
@@ -883,38 +1019,41 @@ const BoringWorkLanding = () => {
                   </p>
                 </motion.div>
               </motion.div>
+            </motion.div>
+          </div>
 
-              <motion.div
-                className="pt-8"
+          {/* Centered Problem Section - Outside Container */}
+          <div className="text-center max-w-4xl mx-auto mt-20 px-4 sm:px-6 lg:px-8">
+            <motion.div
+              className="pt-8"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true }}
+            >
+              <p className="text-2xl font-bold text-gray-900 mb-4">
+                The only problem?
+              </p>
+
+              <motion.h3
+                className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.6, delay: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                 viewport={{ once: true }}
               >
-                <p className="text-2xl font-bold text-gray-900 mb-4">
-                  The only problem?
-                </p>
+                Spending your free time wisely.
+              </motion.h3>
 
-                <motion.h3
-                  className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  viewport={{ once: true }}
-                >
-                  How to spend your free time wisely.
-                </motion.h3>
-
-                <motion.p
-                  className="text-xl text-gray-700 leading-relaxed"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  viewport={{ once: true }}
-                >
-                  This isn't someday. It's the reality of every business owner that chooses to automate.
-                </motion.p>
-              </motion.div>
+              <motion.p
+                className="text-xl text-gray-700 leading-relaxed"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                viewport={{ once: true }}
+              >
+                This isn't someday. It's the reality of every business owner that chooses to automate.
+              </motion.p>
             </motion.div>
           </div>
 
@@ -927,13 +1066,29 @@ const BoringWorkLanding = () => {
           {/* CTA Section */}
           <div className="text-center mt-16">
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-lime-500 hover:bg-lime-600 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+              <button 
+                className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                style={{
+                  backgroundColor: '#1a6388',
+                  boxShadow: '0 4px 14px 0 rgba(26, 99, 136, 0.39)'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#145066'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#1a6388'}
+              >
                 Schedule a Consult
               </button>
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
-                See Our Success Stories
+              <button 
+                className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                style={{
+                  backgroundColor: '#ea7a2c'
+                }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#d16a1f'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#ea7a2c'}
+              >
+                See Our Success Stories 
               </button>
             </div>
+            <br /><br /><br /><br />
           </div>
         </div>
       </section>
@@ -943,7 +1098,7 @@ const BoringWorkLanding = () => {
       <section className="py-0 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4"><br /><br /><br />
               What They're Saying
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -1086,10 +1241,10 @@ const BoringWorkLanding = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-24">
             {/* Step 1: Consultation */}
             <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-orange-100/50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-green-500"></div>
 
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
                   <span className="text-2xl">📞</span>
                 </div>
                 <div>
@@ -1106,15 +1261,15 @@ const BoringWorkLanding = () => {
                   <p className="text-gray-800 font-semibold mb-2">What to expect:</p>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-gray-700">No sales pitch</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-gray-700">Just understanding your pain</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                       <span className="text-gray-700">Honest assessment of fit</span>
                     </div>
                   </div>
@@ -1166,10 +1321,10 @@ const BoringWorkLanding = () => {
 
             {/* Step 3: Plan */}
             <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-yellow-100/50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-orange-500"></div>
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-green-500"></div>
 
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
                   <span className="text-2xl">📋</span>
                 </div>
                 <div>
@@ -1239,7 +1394,7 @@ const BoringWorkLanding = () => {
 
               <div className="space-y-4">
                 <p className="text-gray-700 leading-relaxed">
-                  We roll up our sleeves and build the system — fast, securely, and to spec. Once we hit "go," it's game on.
+                  We roll up our sleeves and build the system - fast, securely, and to spec. Once we hit "go," it's game on.
                 </p>
 
                 <div className="grid grid-cols-2 gap-3">
