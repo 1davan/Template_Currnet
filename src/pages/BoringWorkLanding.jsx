@@ -19,6 +19,7 @@ import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
 import redOxLogo from '../assets/Capture.JPG';
 import Meta from '../components/seo/Meta';
+import SmsPopup from '../components/ui/SmsPopup';
 
 const BoringWorkLanding = () => {
   const testimonials = [
@@ -360,7 +361,7 @@ const BoringWorkLanding = () => {
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#145066'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#1a6388'}
                 >
-                  Schedule a Consult
+                  BOOK A FREE AUDIT
                 </button>
                 <button 
                   className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -370,7 +371,7 @@ const BoringWorkLanding = () => {
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#d16a1f'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#ea7a2c'}
                 >
-                  See Our Success Stories
+                  See what's possible
                 </button>
               </div>
             </div>
@@ -593,7 +594,7 @@ const BoringWorkLanding = () => {
                     <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
                   </div>
                   <p className="text-xl text-gray-700 leading-relaxed">
-                    <span className="text-gray-900">To-do lists that just get bigger and bigger</span>.
+                    <span className="text-gray-700">To-do lists that just get bigger and bigger</span>.
                   </p>
                 </motion.div>
 
@@ -1075,18 +1076,9 @@ const BoringWorkLanding = () => {
                 onMouseEnter={(e) => e.target.style.backgroundColor = '#145066'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = '#1a6388'}
               >
-                Schedule a Consult
+                Book a free audit
               </button>
-              <button 
-                className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                style={{
-                  backgroundColor: '#ea7a2c'
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = '#d16a1f'}
-                onMouseLeave={(e) => e.target.style.backgroundColor = '#ea7a2c'}
-              >
-                See Our Success Stories 
-              </button>
+             
             </div>
             <br /><br /><br /><br />
           </div>
@@ -1444,7 +1436,7 @@ const BoringWorkLanding = () => {
                 Don't know where to begin?
               </h3>
             <p className="text-xl text-gray-700 mb-12 max-w-2xl mx-auto leading-relaxed">
-              That's exactly where most of our clients start. Book a free consult and let's figure it out together.
+              That's exactly where most of our clients start. Book a free audit and let's figure it out together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -1465,6 +1457,8 @@ const BoringWorkLanding = () => {
         </div>
       </section>
 
+      {/* SMS Popup */}
+      <SmsPopup />
     </div>
   );
 };

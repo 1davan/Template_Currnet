@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     react(),
     sitemap({
-      hostname: 'https://boringwork.com', // Update with your actual domain
+      hostname: 'https://boringwork.com.au',
     }),
   ],
   resolve: {
@@ -18,6 +18,13 @@ export default defineConfig({
   server: {
     port: 5173,
     strictPort: true,
+    proxy: {
+      '/api/webhook': {
+        target: 'https://n8n-boringwork-u57538.vm.elestio.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/webhook/, '/webhook'),
+      },
+    },
   },
   preview: {
     port: 4173,
