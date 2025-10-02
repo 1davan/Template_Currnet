@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Bot, ChevronLeft, ChevronRight, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall, Workflow, Cpu, Link, BarChart3, Shield } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Bot, MessageSquare, Brain, ClipboardCheck, Settings, Rocket, Puzzle, Sparkles, PhoneCall, Workflow, Cpu, Link, BarChart3, Shield } from 'lucide-react';
 import manImage from '../assets/man.png';
 import busymanImage from '../assets/busyman.png';
 import automationsImage from '../assets/Automations.png';
@@ -18,8 +18,717 @@ import aiintegrationIcon from '../assets/15.png';
 import modiaHealthLogo from '../assets/MODIA_HEALTH_MED-03.png';
 import modiaEnhanceLogo from '../assets/Untitled (70 x 70 mm).png';
 import redOxLogo from '../assets/Capture.JPG';
+import gearsImage from '../assets/gears.png';
 import Meta from '../components/seo/Meta';
 import SmsPopup from '../components/ui/SmsPopup';
+
+// What's Possible - Professional Tabbed Interface
+const WhatsPossibleCategories = () => {
+  const [activeTab, setActiveTab] = useState('customer');
+  const [expandedCard, setExpandedCard] = useState(null);
+
+  const categories = [
+    {
+      id: 'customer',
+      title: 'Customer Experience',
+      description: <span>Transform <span className="text-blue-600 font-bold">customer interactions</span> with <span className="text-blue-600 font-bold">automated booking</span>, <span className="text-blue-600 font-bold">24/7 support</span>, and <span className="text-blue-600 font-bold">seamless communication</span></span>,
+      automations: [
+        {
+          id: 'appointment-booking',
+          title: 'Automated Appointment Booking',
+          description: 'Voice & text booking via WhatsApp/SMS with instant calendar sync',
+          timeSaved: '5+ hours/week',
+          integrations: ['WhatsApp Business', 'Google Calendar', 'Twilio'],
+          example: 'Customer texts "Book haircut Tuesday 2pm" → Auto-confirms & adds to calendar'
+        },
+        {
+          id: 'support-bot',
+          title: '24/7 Support Automation',
+          description: 'AI-powered customer service that handles inquiries after hours',
+          timeSaved: '6+ hours/week',
+          integrations: ['ChatGPT', 'WhatsApp', 'Knowledge Base'],
+          example: 'Customer asks about hours at 11pm → Bot responds instantly with accurate info'
+        },
+        {
+          id: 'review-collection',
+          title: 'Review Collection System',
+          description: 'Automatically request and track customer reviews across platforms',
+          timeSaved: '4+ hours/week',
+          integrations: ['Google Business', 'Facebook', 'Email'],
+          example: 'After service completion → Auto-send personalized review requests'
+        },
+        {
+          id: 'message-hub',
+          title: 'Unified Message Hub',
+          description: 'All customer messages in one place - SMS, email, Facebook, WhatsApp',
+          timeSaved: '5+ hours/week',
+          integrations: ['Multi-channel Inbox'],
+          example: 'Customer messages from any platform appear in one unified dashboard'
+        },
+        {
+          id: 'complaint-resolution',
+          title: 'AI Complaint Resolution',
+          description: 'Automatically resolve common customer complaints with AI analysis',
+          timeSaved: '6+ hours/week',
+          integrations: ['AI Analysis', 'CRM Integration'],
+          example: 'Customer complaint → AI analyzes issue and provides resolution steps'
+        },
+        {
+          id: 'voice-booking',
+          title: 'Voice-Based Booking',
+          description: 'Customers can book appointments using voice commands',
+          timeSaved: '4+ hours/week',
+          integrations: ['Voice AI', 'Calendar Systems'],
+          example: 'Customer calls and says "Book me for tomorrow at 3pm" → Auto-confirmed'
+        }
+      ]
+    },
+    {
+      id: 'financial',
+      title: 'Financial Operations',
+      description: <span>Eliminate <span className="text-blue-600 font-bold">accounting headaches</span> with <span className="text-blue-600 font-bold">smart invoicing</span>, <span className="text-blue-600 font-bold">expense tracking</span>, and <span className="text-blue-600 font-bold">automated reminders</span></span>,
+      automations: [
+        {
+          id: 'smart-invoicing',
+          title: 'Smart Invoice Generation',
+          description: 'Auto-create and send invoices from completed jobs',
+          timeSaved: '6+ hours/week',
+          integrations: ['QuickBooks', 'Xero', 'PDF Generator'],
+          example: 'Job marked complete → Invoice auto-generated, sent, and logged'
+        },
+        {
+          id: 'receipt-processing',
+          title: 'Receipt Processing',
+          description: 'Scan receipts, categorize expenses, update books automatically',
+          timeSaved: '4+ hours/week',
+          integrations: ['OCR', 'Accounting Software'],
+          example: 'Photo of receipt → Data extracted and categorized automatically'
+        },
+        {
+          id: 'payment-reminders',
+          title: 'Payment Reminders',
+          description: 'Track overdue invoices and send gentle reminders',
+          timeSaved: '4+ hours/week',
+          integrations: ['Email', 'SMS', 'Payment Tracking'],
+          example: 'Invoice 7 days overdue → Auto-send friendly payment reminder'
+        },
+        {
+          id: 'quote-automation',
+          title: 'Quote Automation',
+          description: 'Generate professional quotes in minutes, not hours',
+          timeSaved: '5+ hours/week',
+          integrations: ['Templates', 'PDF Generation'],
+          example: 'Customer inquiry → Branded quote created in under 2 minutes'
+        },
+        {
+          id: 'payroll-processing',
+          title: 'Automated Payroll',
+          description: 'Calculate wages, taxes, and generate payslips automatically',
+          timeSaved: '8+ hours/week',
+          integrations: ['Time Tracking', 'Tax Calculation', 'Banking'],
+          example: 'End of month → Auto-calculate payroll and generate payslips'
+        },
+        {
+          id: 'expense-reimbursement',
+          title: 'Expense Reimbursement',
+          description: 'Auto-approve and reimburse employee expenses',
+          timeSaved: '4+ hours/week',
+          integrations: ['Receipt Scanning', 'Approval Workflows'],
+          example: 'Employee submits receipt → Auto-approved and reimbursed'
+        },
+        {
+          id: 'tax-preparation',
+          title: 'Tax Preparation Assistant',
+          description: 'Automated tax calculation and filing preparation',
+          timeSaved: '2.5+ hours/week',
+          integrations: ['Tax Software', 'Financial Records'],
+          example: 'Quarter end → Auto-calculate taxes and prepare filing documents'
+        }
+      ]
+    },
+    {
+      id: 'team',
+      title: 'Team Management',
+      description: <span>Supercharge <span className="text-blue-600 font-bold">team productivity</span> with <span className="text-blue-600 font-bold">automated scheduling</span>, <span className="text-blue-600 font-bold">timesheet tracking</span>, and <span className="text-blue-600 font-bold">onboarding workflows</span></span>,
+      automations: [
+        {
+          id: 'timesheet-automation',
+          title: 'Timesheet Automation',
+          description: 'Track hours, breaks, and overtime without manual entry',
+          timeSaved: '4+ hours/week',
+          integrations: ['Time Tracking', 'Payroll Sync'],
+          example: 'Staff clock in/out via phone → Hours auto-calculated & logged'
+        },
+        {
+          id: 'staff-scheduling',
+          title: 'Staff Scheduling',
+          description: 'Auto-schedule shifts based on availability and demand',
+          timeSaved: '4+ hours/week',
+          integrations: ['Scheduling Software', 'Calendar'],
+          example: 'Set rules → System creates optimal schedule automatically'
+        },
+        {
+          id: 'onboarding-workflow',
+          title: 'Onboarding Workflow',
+          description: 'New hire paperwork, training checklists, document collection',
+          timeSaved: '1+ hours/week',
+          integrations: ['Document Management', 'Task Tracking'],
+          example: 'New hire starts → Auto-send forms and track completion'
+        },
+        {
+          id: 'performance-tracking',
+          title: 'Performance Tracking',
+          description: 'Monitor employee goals, feedback, and performance metrics',
+          timeSaved: '4+ hours/week',
+          integrations: ['Performance Software', 'Goal Tracking'],
+          example: 'Monthly reviews → Auto-collect feedback and generate reports'
+        },
+        {
+          id: 'absence-management',
+          title: 'Leave & Absence Management',
+          description: 'Track PTO, sick days, and manage leave requests automatically',
+          timeSaved: '2+ hours/week',
+          integrations: ['Calendar Systems', 'HR Software'],
+          example: 'Employee requests leave → Auto-approved and calendar updated'
+        },
+        {
+          id: 'training-scheduling',
+          title: 'Training & Development',
+          description: 'Schedule training sessions and track employee development',
+          timeSaved: '4+ hours/week',
+          integrations: ['Learning Management', 'Calendar Systems'],
+          example: 'New certification needed → Auto-schedule training and track progress'
+        }
+      ]
+    },
+    {
+      id: 'operations',
+      title: 'Daily Operations',
+      description: <span>Streamline <span className="text-blue-600 font-bold">daily operations</span> with <span className="text-blue-600 font-bold">inventory management</span>, <span className="text-blue-600 font-bold">document organization</span>, and <span className="text-blue-600 font-bold">supplier automation</span></span>,
+      automations: [
+        {
+          id: 'inventory-tracking',
+          title: 'Inventory Tracking',
+          description: 'Know when stock is low, auto-order from suppliers',
+          timeSaved: '5+ hours/week',
+          integrations: ['Inventory Management', 'Supplier Integration'],
+          example: 'Stock hits threshold → Auto-create purchase order & notify supplier'
+        },
+        {
+          id: 'document-organization',
+          title: 'Document Organization',
+          description: 'Find any contract, permit, or document instantly with AI search',
+          timeSaved: '4+ hours/week',
+          integrations: ['Cloud Storage', 'AI Search'],
+          example: 'Ask "Where\'s the lease agreement?" → System finds it instantly'
+        },
+        {
+          id: 'supplier-management',
+          title: 'Supplier Management',
+          description: 'Automated POs, delivery tracking, and invoice matching',
+          timeSaved: '4+ hours/week',
+          integrations: ['Email', 'Order Management'],
+          example: 'Create order → Auto-send to supplier and track delivery'
+        },
+        {
+          id: 'customer-followups',
+          title: 'Customer Follow-ups',
+          description: 'Auto-send thank you messages, review requests, re-booking reminders',
+          timeSaved: '4+ hours/week',
+          integrations: ['Email', 'SMS Automation'],
+          example: 'Service complete → Thank you message and review request sent automatically'
+        },
+        {
+          id: 'quality-control',
+          title: 'Quality Control System',
+          description: 'Automated checklists and quality assurance for service delivery',
+          timeSaved: '4+ hours/week',
+          integrations: ['Quality Management', 'Task Tracking'],
+          example: 'Service checklist → Auto-verify completion and flag issues'
+        },
+        {
+          id: 'compliance-monitoring',
+          title: 'Compliance Monitoring',
+          description: 'Track regulatory compliance and generate audit reports',
+          timeSaved: '5+ hours/week',
+          integrations: ['Compliance Software', 'Document Management'],
+          example: 'Monthly audit → Auto-generate compliance reports and alerts'
+        },
+        {
+          id: 'facility-management',
+          title: 'Facility Management',
+          description: 'Schedule maintenance, track assets, and manage facility requests',
+          timeSaved: '4+ hours/week',
+          integrations: ['Maintenance Software', 'Asset Tracking'],
+          example: 'Equipment due for service → Auto-create work order and notify technician'
+        }
+      ]
+    },
+    {
+      id: 'marketing',
+      title: 'Marketing & Content',
+      description: <span>Scale <span className="text-blue-600 font-bold">marketing efforts</span> with <span className="text-blue-600 font-bold">social automation</span>, <span className="text-blue-600 font-bold">AI content creation</span>, and <span className="text-blue-600 font-bold">email campaigns</span></span>,
+      automations: [
+        {
+          id: 'social-automation',
+          title: 'Social Media Automation',
+          description: 'Schedule posts, auto-respond to comments, track engagement',
+          timeSaved: '6+ hours/week',
+          integrations: ['Facebook', 'Instagram', 'Google Business'],
+          example: 'Create content once → Auto-post to all platforms at optimal times'
+        },
+        {
+          id: 'content-creation',
+          title: 'Content Creation',
+          description: 'AI-generated posts, images, and promotional materials',
+          timeSaved: '5+ hours/week',
+          integrations: ['AI Content Tools', 'Image Generation'],
+          example: 'Describe promotion → System creates post, image, and hashtags'
+        },
+        {
+          id: 'email-campaigns',
+          title: 'Email Campaigns',
+          description: 'Automated newsletters, promotions, and customer updates',
+          timeSaved: '4+ hours/week',
+          integrations: ['Email Marketing Platforms'],
+          example: 'Monthly specials → Auto-create & send to customer segments'
+        },
+        {
+          id: 'content-repurposing',
+          title: 'Content Repurposing',
+          description: 'Transform blog posts into social media, videos, and infographics',
+          timeSaved: '6+ hours/week',
+          integrations: ['Content Management', 'Social Platforms'],
+          example: 'Write blog post → Auto-create social snippets, images, and schedule posts'
+        },
+        {
+          id: 'seo-optimization',
+          title: 'SEO Optimization',
+          description: 'Monitor rankings, suggest improvements, and track competitors',
+          timeSaved: '5+ hours/week',
+          integrations: ['SEO Tools', 'Analytics'],
+          example: 'Weekly report → Keyword rankings, competitor analysis, and recommendations'
+        },
+        {
+          id: 'video-generation',
+          title: 'AI Video Creation',
+          description: 'Generate short-form videos for social media from text descriptions',
+          timeSaved: '5+ hours/week',
+          integrations: ['AI Video Tools', 'Social Platforms'],
+          example: 'Describe product → Auto-create 15-second video and post to TikTok'
+        }
+      ]
+    },
+    {
+      id: 'insights',
+      title: 'Data & Insights',
+      description: <span>Unlock <span className="text-blue-600 font-bold">business intelligence</span> with <span className="text-blue-600 font-bold">automated reports</span>, <span className="text-blue-600 font-bold">feedback analysis</span>, and <span className="text-blue-600 font-bold">trend tracking</span></span>,
+      automations: [
+        {
+          id: 'automated-reports',
+          title: 'Automated Reports',
+          description: 'Daily/weekly business performance reports in your inbox',
+          timeSaved: '4+ hours/week',
+          integrations: ['Business Analytics', 'Report Generation'],
+          example: 'Every Monday 8am → Get comprehensive performance report automatically'
+        },
+        {
+          id: 'feedback-analysis',
+          title: 'Customer Feedback Analysis',
+          description: 'Collect, analyze, and act on customer feedback automatically',
+          timeSaved: '2+ hours/week',
+          integrations: ['Survey Tools', 'Sentiment Analysis'],
+          example: 'Reviews/surveys → AI analyzes sentiment and highlights issues'
+        },
+        {
+          id: 'trend-tracking',
+          title: 'Trend Tracking',
+          description: 'Monitor business trends, competitor pricing, market changes',
+          timeSaved: '2+ hours/week',
+          integrations: ['Web Monitoring', 'Analytics'],
+          example: 'Track competitor prices → Get alerts when rates change'
+        },
+        {
+          id: 'predictive-analytics',
+          title: 'Predictive Analytics',
+          description: 'Forecast demand, predict customer churn, and optimize pricing',
+          timeSaved: '6+ hours/week',
+          integrations: ['Machine Learning', 'Data Analysis'],
+          example: 'Historical data → Predict next month\'s demand and optimal pricing'
+        },
+        {
+          id: 'competitor-intelligence',
+          title: 'Competitor Intelligence',
+          description: 'Monitor competitor activities, pricing, and market positioning',
+          timeSaved: '4+ hours/week',
+          integrations: ['Web Scraping', 'Social Monitoring'],
+          example: 'Daily scan → Reports on competitor promotions and market changes'
+        },
+        {
+          id: 'customer-segmentation',
+          title: 'Customer Segmentation',
+          description: 'Automatically categorize customers and personalize communications',
+          timeSaved: '4+ hours/week',
+          integrations: ['CRM', 'Analytics'],
+          example: 'Customer data → Auto-segment into groups and suggest personalized offers'
+        }
+      ]
+    },
+    {
+      id: 'inventory',
+      title: 'Inventory & Supply Chain',
+      description: <span>Optimize <span className="text-blue-600 font-bold">inventory management</span> with <span className="text-blue-600 font-bold">automated tracking</span>, <span className="text-blue-600 font-bold">demand forecasting</span>, and <span className="text-blue-600 font-bold">supplier automation</span></span>,
+      automations: [
+        {
+          id: 'stock-monitoring',
+          title: 'Smart Stock Monitoring',
+          description: 'Real-time inventory tracking with automatic reorder alerts',
+          timeSaved: '5+ hours/week',
+          integrations: ['Inventory Systems', 'Supplier APIs'],
+          example: 'Stock hits minimum → Auto-generate purchase order and notify supplier'
+        },
+        {
+          id: 'demand-forecasting',
+          title: 'Demand Forecasting',
+          description: 'AI-powered predictions for inventory planning and procurement',
+          timeSaved: '4+ hours/week',
+          integrations: ['Analytics', 'Machine Learning'],
+          example: 'Historical sales → Predict next month\'s inventory needs accurately'
+        },
+        {
+          id: 'supplier-management',
+          title: 'Supplier Performance Tracking',
+          description: 'Monitor supplier reliability, quality, and delivery times',
+          timeSaved: '4+ hours/week',
+          integrations: ['Supplier Portals', 'Performance Tracking'],
+          example: 'Supplier delivers late → Auto-update performance score and alerts'
+        },
+        {
+          id: 'warehouse-optimization',
+          title: 'Warehouse Optimization',
+          description: 'Optimize storage layout and picking routes automatically',
+          timeSaved: '6+ hours/week',
+          integrations: ['Warehouse Management', 'Route Optimization'],
+          example: 'New inventory → Auto-suggest optimal storage locations'
+        }
+      ]
+    },
+    {
+      id: 'it-infrastructure',
+      title: 'IT & Infrastructure',
+      description: <span>Maintain <span className="text-blue-600 font-bold">reliable IT systems</span> with <span className="text-blue-600 font-bold">automated monitoring</span>, <span className="text-blue-600 font-bold">backup systems</span>, and <span className="text-blue-600 font-bold">security management</span></span>,
+      automations: [
+        {
+          id: 'system-monitoring',
+          title: 'System Health Monitoring',
+          description: '24/7 monitoring of servers, networks, and applications',
+          timeSaved: '8+ hours/week',
+          integrations: ['Monitoring Tools', 'Alert Systems'],
+          example: 'Server down → Auto-alert IT team and attempt auto-recovery'
+        },
+        {
+          id: 'automated-backups',
+          title: 'Automated Backup Systems',
+          description: 'Scheduled backups with verification and disaster recovery',
+          timeSaved: '4+ hours/week',
+          integrations: ['Backup Software', 'Cloud Storage'],
+          example: 'Daily at 2am → Backup all systems and verify integrity'
+        },
+        {
+          id: 'security-management',
+          title: 'Security Threat Detection',
+          description: 'Monitor for security threats and automate response actions',
+          timeSaved: '6+ hours/week',
+          integrations: ['Security Tools', 'SIEM Systems'],
+          example: 'Suspicious activity → Auto-block IP and alert security team'
+        },
+        {
+          id: 'user-access-control',
+          title: 'User Access Management',
+          description: 'Automate user onboarding, access rights, and offboarding',
+          timeSaved: '4+ hours/week',
+          integrations: ['Identity Management', 'HR Systems'],
+          example: 'New employee → Auto-create accounts and assign appropriate access'
+        }
+      ]
+    },
+    {
+      id: 'project-management',
+      title: 'Project Management',
+      description: <span>Streamline <span className="text-blue-600 font-bold">project delivery</span> with <span className="text-blue-600 font-bold">automated tracking</span>, <span className="text-blue-600 font-bold">resource allocation</span>, and <span className="text-blue-600 font-bold">progress reporting</span></span>,
+      automations: [
+        {
+          id: 'project-status-updates',
+          title: 'Automated Status Reports',
+          description: 'Generate daily/weekly project status updates automatically',
+          timeSaved: '4+ hours/week',
+          integrations: ['Project Management Tools', 'Reporting Systems'],
+          example: 'Every Monday → Auto-generate project status report for all stakeholders'
+        },
+        {
+          id: 'deadline-tracking',
+          title: 'Deadline & Milestone Tracking',
+          description: 'Monitor project deadlines and send automated reminders',
+          timeSaved: '2+ hours/week',
+          integrations: ['Calendar Systems', 'Notification Tools'],
+          example: 'Task due tomorrow → Auto-remind team member and escalate if needed'
+        },
+        {
+          id: 'resource-allocation',
+          title: 'Resource Allocation',
+          description: 'Automatically assign tasks based on availability and skills',
+          timeSaved: '4+ hours/week',
+          integrations: ['Resource Management', 'Scheduling Tools'],
+          example: 'New task → Auto-assign to best available team member'
+        },
+        {
+          id: 'budget-tracking',
+          title: 'Project Budget Monitoring',
+          description: 'Track project expenses and alert when budget thresholds are reached',
+          timeSaved: '2+ hours/week',
+          integrations: ['Financial Systems', 'Project Tools'],
+          example: 'Budget 80% used → Auto-alert project manager and suggest adjustments'
+        }
+      ]
+    }
+  ];
+
+  const getAutomationBenefit = (automationId) => {
+    const benefits = {
+      // Customer Experience
+      'appointment-booking': "Never miss a booking opportunity! This smart system captures leads 24/7 and instantly syncs with your calendar, turning 'maybe later' into confirmed appointments.",
+      'support-bot': "Your customers get instant answers while you sleep. This AI assistant handles routine inquiries, freeing your team for complex customer relationships.",
+      'review-collection': "Turn satisfied customers into vocal advocates! Automated review requests capture feedback at the perfect moment when satisfaction is highest.",
+      'message-hub': "End the chaos of scattered messages! Every customer interaction flows into one unified dashboard, giving you complete visibility and control.",
+      'complaint-resolution': "Transform customer complaints into opportunities! AI analyzes issues instantly and suggests resolutions, turning frustrated customers into loyal fans.",
+      'voice-booking': "Talk is cheap—unless it books appointments! Voice commands make booking effortless, capturing more business from mobile customers on the go.",
+
+      // Financial Operations
+      'smart-invoicing': "Invoices that send themselves? This automation eliminates the tedious paperwork, ensuring you get paid faster and more reliably.",
+      'receipt-processing': "Tired of deciphering crumpled receipts? AI instantly extracts data, categorizes expenses, and updates your books with perfect accuracy.",
+      'payment-reminders': "Stop losing money to forgetful clients! Gentle, automated reminders maintain relationships while ensuring your cash flow stays healthy.",
+      'quote-automation': "Quotes in minutes, not hours! Professional proposals are generated instantly, helping you win more business with lightning-fast responses.",
+      'payroll-processing': "Payroll perfection without the headache! Automated calculations, tax compliance, and direct deposits mean happy employees and zero errors.",
+      'expense-reimbursement': "Expense reports that approve themselves! Smart rules instantly process legitimate claims, getting money back to employees faster.",
+      'tax-preparation': "Tax season without the stress! Automated calculations and organized documentation make compliance effortless and accurate.",
+
+      // Team Management
+      'timesheet-automation': "Timesheets that track themselves! Employees simply clock in/out, while the system calculates wages, breaks, and overtime automatically.",
+      'staff-scheduling': "Scheduling that solves itself! AI considers availability, skills, and demand to create optimal schedules that keep everyone happy.",
+      'onboarding-workflow': "New hires onboard themselves! Digital paperwork, training assignments, and progress tracking happen automatically from day one.",
+      'performance-tracking': "Performance insights that arrive automatically! Regular feedback collection and analysis help your team continuously improve.",
+      'absence-management': "Leave requests that manage themselves! Automated approval workflows and calendar updates keep operations running smoothly.",
+      'training-scheduling': "Training that finds the right people! Skill gaps are identified automatically, and personalized training programs are scheduled instantly.",
+
+      // Daily Operations
+      'inventory-tracking': "Stock levels that watch themselves! Never run out of popular items again with smart reordering that keeps your shelves full.",
+      'document-organization': "Find any document in seconds! AI-powered search means contracts, permits, and records are always at your fingertips.",
+      'supplier-management': "Suppliers that perform perfectly! Automated tracking ensures reliability, quality, and on-time delivery from your vendor network.",
+      'customer-followups': "Customer relationships that nurture themselves! Automated thank-yous, reviews, and rebooking reminders keep clients coming back.",
+      'quality-control': "Quality that polices itself! Automated checklists and verification ensure every service meets your high standards.",
+      'compliance-monitoring': "Compliance that happens automatically! Regular audits and reports keep you audit-ready without manual effort.",
+      'facility-management': "Buildings that maintain themselves! Automated scheduling ensures equipment is serviced and facilities run smoothly.",
+
+      // Marketing & Content
+      'social-automation': "Social media that posts itself! Content is scheduled for optimal times across all platforms, growing your audience while you focus on business.",
+      'content-creation': "Content that creates itself! AI generates posts, images, and captions that match your brand voice and engage your audience.",
+      'email-campaigns': "Email marketing that converts! Automated newsletters and promotions are sent at perfect times with personalized content for each segment.",
+      'content-repurposing': "One piece of content becomes many! Blogs automatically transform into social posts, videos, and graphics, maximizing your content ROI.",
+      'seo-optimization': "SEO that optimizes itself! Rankings are monitored, competitors analyzed, and actionable recommendations delivered weekly.",
+      'video-generation': "Videos that produce themselves! Turn text descriptions into engaging short-form videos that capture attention and drive engagement.",
+
+      // Data & Insights
+      'automated-reports': "Business intelligence that arrives daily! Comprehensive reports land in your inbox every morning, giving you data-driven insights instantly.",
+      'feedback-analysis': "Customer sentiment that reveals itself! AI analyzes reviews and surveys, highlighting issues and opportunities in real-time.",
+      'trend-tracking': "Market changes that alert you instantly! Stay ahead of competitors with automated monitoring of pricing and industry trends.",
+      'predictive-analytics': "The future that predicts itself! AI forecasts demand, churn risk, and optimal pricing to help you make smarter business decisions.",
+      'competitor-intelligence': "Competitor secrets revealed automatically! Daily reports on promotions, pricing, and strategies keep you one step ahead.",
+      'customer-segmentation': "Customers that organize themselves! AI automatically groups customers and suggests personalized marketing strategies for each segment.",
+
+      // Inventory & Supply Chain
+      'stock-monitoring': "Inventory that manages itself! Smart alerts prevent stockouts while automated reordering keeps your supply chain flowing smoothly.",
+      'demand-forecasting': "Sales predictions that predict themselves! AI analyzes patterns to forecast demand accurately, preventing over/under stocking.",
+      'supplier-management': "Supplier performance that tracks itself! Automated monitoring ensures quality, reliability, and optimal vendor relationships.",
+      'warehouse-optimization': "Warehouse efficiency that maximizes itself! Smart layout suggestions and picking routes reduce time and increase productivity.",
+
+      // IT & Infrastructure
+      'system-monitoring': "IT systems that watch themselves! 24/7 monitoring catches issues before they become problems, keeping your business running smoothly.",
+      'automated-backups': "Data protection that happens automatically! Scheduled backups with verification ensure your critical data is always safe and recoverable.",
+      'security-management': "Cyber threats that stop themselves! Automated detection and response keeps your business secure without constant monitoring.",
+      'user-access-control': "User permissions that manage themselves! Automated onboarding and offboarding ensures security without administrative burden.",
+
+      // Project Management
+      'project-status-updates': "Project progress that reports itself! Stakeholders get automatic updates, keeping everyone aligned and informed.",
+      'deadline-tracking': "Deadlines that remind themselves! Automated notifications and escalations ensure projects stay on track and on time.",
+      'resource-allocation': "Team assignments that optimize themselves! AI matches tasks to the best available people, maximizing productivity and satisfaction.",
+      'budget-tracking': "Project spending that monitors itself! Automatic alerts prevent budget overruns and keep projects financially on track."
+    };
+    return benefits[automationId] || "This automation delivers significant time savings and operational efficiency.";
+  };
+
+  const activeCategory = categories.find(cat => cat.id === activeTab);
+
+  return (
+    <div className="space-y-12">
+      {/* Category Tabs */}
+      <div className="flex flex-wrap justify-center gap-3 md:gap-6">
+        {categories.map((category, index) => {
+          const isActive = activeTab === category.id;
+
+          return (
+            <motion.button
+              key={category.id}
+              onClick={() => {
+                setActiveTab(category.id);
+                setExpandedCard(null);
+              }}
+              className={`px-6 py-3 rounded-xl text-xs font-semibold transition-all duration-300 border-2 shadow-sm hover:shadow-md backdrop-blur-sm ${
+                isActive
+                  ? 'bg-blue-600 border-blue-600 text-white'
+                  : 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100'
+              }`}
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+            >
+                      {category.title}
+              <span className={`ml-2 text-xs font-bold ${isActive ? 'opacity-90' : 'opacity-75'}`}>
+                ({category.automations.length})
+              </span>
+            </motion.button>
+          );
+        })}
+                  </div>
+
+      {/* Category Description */}
+      <AnimatePresence mode="wait">
+                    <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="text-center max-w-2xl mx-auto"
+                    >
+          <p className="text-base text-gray-600 leading-relaxed">
+            {activeCategory.description}
+          </p>
+                    </motion.div>
+      </AnimatePresence>
+
+      {/* Automation Cards Grid */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative"
+          layout
+        >
+        {activeCategory.automations.map((automation, index) => {
+                      return (
+                        <motion.div
+              key={automation.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className={`group bg-white/95 backdrop-blur-sm rounded-xl border-2 border-blue-200 hover:border-blue-400 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-visible cursor-pointer ${
+                expandedCard === automation.id ? 'ring-2 ring-blue-500 shadow-xl z-20 rounded-b-none border-b-0' : ''
+              }`}
+              onClick={() => setExpandedCard(expandedCard === automation.id ? null : automation.id)}
+              whileHover={{ y: -4, scale: 1.01 }}
+              layout
+            >
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-blue-100/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+              <div className="relative z-10 p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="text-lg font-bold text-gray-900 leading-tight">
+                    {automation.title}
+                  </h3>
+                  <svg
+                    className={`w-4 h-4 text-gray-400 transform transition-transform ${expandedCard === automation.id ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                              </div>
+
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  {automation.description}
+                </p>
+
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-sm px-3 py-1 rounded-full bg-blue-100 text-blue-700">
+                    {automation.timeSaved}
+                  </span>
+                            </div>
+
+                            {/* Expanded Details - Card Expansion Effect */}
+                            <div className="relative">
+                              <AnimatePresence>
+                                {expandedCard === automation.id && (
+                                  <motion.div
+                                    initial={{ opacity: 0, y: -20, scaleY: 0 }}
+                                    animate={{ opacity: 1, y: 0, scaleY: 1 }}
+                                    exit={{ opacity: 0, y: -20, scaleY: 0 }}
+                                    transition={{
+                                      duration: 0.3,
+                                      ease: "easeOut",
+                                      scaleY: { duration: 0.2 }
+                                    }}
+                                    className="absolute top-full left-0 right-0 z-30 -mt-px"
+                                    style={{ transformOrigin: 'top center' }}
+                                  >
+                                    <div className="bg-white/95 backdrop-blur-sm rounded-b-xl border-2 border-t-0 border-blue-200 shadow-2xl p-4">
+                                      <div className="bg-blue-50 rounded-lg p-4">
+                                        <h4 className="text-sm font-semibold text-gray-900 mb-2">How it works:</h4>
+                                        <p className="text-sm text-gray-700 leading-relaxed">
+                                          {automation.example}
+                                        </p>
+                                        <p className="text-sm text-gray-600 mt-2 leading-relaxed">
+                                          {getAutomationBenefit(automation.id)}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Bottom CTA */}
+      <motion.div
+        className="text-center max-w-2xl mx-auto"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+      >
+        <p className="text-lg text-gray-700 mb-8">
+          Don't see what you need? We build custom automation solutions for your unique business requirements.
+        </p>
+        <button 
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        >
+          LET'S DISCUSS YOUR NEEDS
+        </button>
+      </motion.div>
+    </div>
+  );
+};
 
 const BoringWorkLanding = () => {
   const testimonials = [
@@ -49,12 +758,6 @@ const BoringWorkLanding = () => {
     }
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startPos, setStartPos] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const carouselRef = useRef(null);
 
   // Scroll animation states
   const [dailyGrindSectionExpanded, setDailyGrindSectionExpanded] = useState(false);
@@ -72,28 +775,6 @@ const BoringWorkLanding = () => {
   const enterBoringWorkRef = useRef(null);
   const lifeAfterBoringWorkRef = useRef(null);
 
-  // Auto-play functionality
-  useEffect(() => {
-    if (!isAutoPlaying || isDragging) return;
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, isDragging]);
-
-  // Infinite scroll logic - reset to beginning when reaching duplicates
-  useEffect(() => {
-    if (currentIndex >= testimonials.length) {
-      // Use setTimeout to reset without animation after the transition completes
-      const timer = setTimeout(() => {
-        setCurrentIndex(0);
-      }, 500); // Match the transition duration
-
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, testimonials.length]);
 
   // Scroll animation based on viewport middle trigger
   useEffect(() => {
@@ -202,68 +883,6 @@ const BoringWorkLanding = () => {
     };
   }, []);
 
-  // Handle mouse/touch events for dragging
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setIsAutoPlaying(false);
-    setStartPos(e.pageX - carouselRef.current.offsetLeft);
-    setScrollLeft(carouselRef.current.scrollLeft);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startPos) * 2;
-    carouselRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    setTimeout(() => setIsAutoPlaying(true), 5000);
-  };
-
-  const handleTouchStart = (e) => {
-    setIsDragging(true);
-    setIsAutoPlaying(false);
-    setStartPos(e.touches[0].pageX - carouselRef.current.offsetLeft);
-    setScrollLeft(carouselRef.current.scrollLeft);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-    const x = e.touches[0].pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startPos) * 2;
-    carouselRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    setTimeout(() => setIsAutoPlaying(true), 5000);
-  };
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => prevIndex + 1);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => {
-      if (prevIndex <= 0) {
-        return testimonials.length - 1;
-      }
-      return prevIndex - 1;
-    });
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-    setIsAutoPlaying(false);
-    setTimeout(() => setIsAutoPlaying(true), 10000);
-  };
 
   return (
     <div className="min-h-screen">
@@ -371,7 +990,12 @@ const BoringWorkLanding = () => {
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#d16a1f'}
                   onMouseLeave={(e) => e.target.style.backgroundColor = '#ea7a2c'}
                 >
-                  See what's possible
+                  <div className="flex items-center justify-center gap-2">
+                    SEE WHAT'S POSSIBLE
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                 </button>
               </div>
             </div>
@@ -1076,7 +1700,7 @@ const BoringWorkLanding = () => {
                 onMouseEnter={(e) => e.target.style.backgroundColor = '#145066'}
                 onMouseLeave={(e) => e.target.style.backgroundColor = '#1a6388'}
               >
-                Book a free audit
+                BOOK A FREE AUDIT
               </button>
              
             </div>
@@ -1085,132 +1709,84 @@ const BoringWorkLanding = () => {
         </div>
       </section>
 
+      {/* Testimonials Section - Modern Grid Layout */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+        {/* Subtle Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-10 right-10 w-32 h-32 bg-gradient-to-br from-blue-100/30 to-purple-100/30 rounded-full blur-2xl"></div>
+          <div className="absolute bottom-10 left-10 w-40 h-40 bg-gradient-to-tr from-orange-100/20 to-pink-100/20 rounded-full blur-2xl"></div>
+        </div>
 
-      {/* Testimonials Carousel Section */}
-      <section className="py-0 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4"><br /><br /><br />
-              What They're Saying
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <MessageSquare className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+                What They're Saying
+              </h2>
+            </div>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Real businesses. Real results. Real freedom from busywork.
             </p>
           </div>
 
-          {/* Carousel Container */}
-          <div className="relative">
-            {/* Navigation Arrows */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 -translate-x-1/2"
-            >
-              <ChevronLeft className="h-6 w-6 text-gray-600" />
-            </button>
-            <button
-              onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white rounded-full p-3 shadow-lg transition-all duration-300 translate-x-1/2"
-            >
-              <ChevronRight className="h-6 w-6 text-gray-600" />
-            </button>
-
-            {/* Carousel Track */}
-            <div
-              ref={carouselRef}
-              className="overflow-hidden cursor-grab active:cursor-grabbing"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
+          {/* Testimonials Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {testimonials.map((testimonial, index) => (
               <div
-                className="flex transition-transform duration-500 ease-in-out gap-8"
-                style={{
-                  transform: `translateX(-${currentIndex * (100 / 3)}%)`,
-                  width: `${(testimonials.length * 2 * 100) / 3}%`
-                }}
+                key={testimonial.id}
+                className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100/50 hover:border-gray-200/70 relative overflow-hidden"
               >
-                {testimonials.map((testimonial, index) => (
-                  <div
-                    key={`${testimonial.id}-${index}`}
-                    className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex-shrink-0"
-                    style={{ width: '33.333%' }}
-                  >
-                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${testimonial.color}`}></div>
-                    <div className="flex flex-col items-center text-center space-y-6">
-                      <div className="w-20 h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center p-2">
-                        <img
-                          src={testimonial.logo}
-                          alt={`${testimonial.company} Logo`}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                      <div className="space-y-4">
-                        <p className="text-gray-700 font-medium leading-relaxed text-lg">
-                          "{testimonial.quote}"
-                        </p>
-                        <div className="pt-4 border-t border-gray-100">
-                          <p className="text-sm font-semibold text-gray-900">{testimonial.company}</p>
-                          <p className="text-sm text-gray-600">{testimonial.type}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                {/* Subtle gradient accent */}
+                <div className={`absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r ${testimonial.color}`}></div>
 
-                {/* Duplicate testimonials for infinite scroll effect */}
-                {testimonials.map((testimonial, index) => (
-                  <div
-                    key={`duplicate-${testimonial.id}-${index}`}
-                    className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden flex-shrink-0"
-                    style={{ width: '33.333%' }}
-                  >
-                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${testimonial.color}`}></div>
-                    <div className="flex flex-col items-center text-center space-y-6">
-                      <div className="w-20 h-20 bg-white rounded-2xl shadow-lg flex items-center justify-center p-2">
-                        <img
-                          src={testimonial.logo}
-                          alt={`${testimonial.company} Logo`}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                      <div className="space-y-4">
-                        <p className="text-gray-700 font-medium leading-relaxed text-lg">
-                          "{testimonial.quote}"
-                        </p>
-                        <div className="pt-4 border-t border-gray-100">
-                          <p className="text-sm font-semibold text-gray-900">{testimonial.company}</p>
-                          <p className="text-sm text-gray-600">{testimonial.type}</p>
-                        </div>
-                      </div>
+                {/* Quote mark icon */}
+                <div className="absolute top-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity duration-300">
+                  <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 32 32">
+                    <path d="M10 8v8l-6-6V6h6zM22 8v8l-6-6V6h6z"/>
+                  </svg>
+                </div>
+
+                <div className="relative z-10">
+                  {/* Company Logo */}
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="w-16 h-16 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center p-3 group-hover:shadow-md transition-shadow duration-300">
+                      <img
+                        src={testimonial.logo}
+                        alt={`${testimonial.company} Logo`}
+                        className="w-full h-full object-contain"
+                      />
                     </div>
                   </div>
-                ))}
+
+                  {/* Quote Text */}
+                  <blockquote className="text-gray-700 leading-relaxed text-sm lg:text-base mb-6 font-medium">
+                    "{testimonial.quote}"
+                  </blockquote>
+
+                  {/* Author Info */}
+                  <div className="pt-4 border-t border-gray-100">
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-gray-900 mb-1">{testimonial.company}</p>
+                      <p className="text-xs text-gray-500">{testimonial.type}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Hover effect overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-50/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
               </div>
-            </div>
-            {/* Dot Indicators */}
-            <div className="flex justify-center mt-14 space-x-2 pb-8">
-              {testimonials.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === currentIndex % testimonials.length
-                      ? 'bg-lime-500 scale-125'
-                      : 'bg-gray-300 hover:bg-gray-400'
-                  }`}
-                />
-              ))}
-            </div>
+            ))}
           </div>
+
         </div>
       </section>
 
-      {/* How It Works Section - Matching PAS Style */}
-      <section id="how-it-works" className="relative bg-gray-50 py-24 lg:py-40 overflow-hidden">
+      {/* How It Works Section - Horizontal 1x4 Grid */}
+      <section id="how-it-works" className="relative bg-gray-50 py-24 lg:py-32 overflow-hidden">
         {/* Creative Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-br from-blue-200/20 to-purple-200/20 rounded-full blur-3xl"></div>
@@ -1218,215 +1794,170 @@ const BoringWorkLanding = () => {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-emerald-200/10 to-blue-200/10 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Hero Introduction */}
-          <div className="text-center mb-20">
-             
-              <h2 className="text-2xl lg:text-4xl font-bold text-gray-900">
-                How It Works
-              </h2>
-
-          
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 mb-4">
+              How It Works
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              From first call to full automation in 4 simple steps
+            </p>
           </div>
 
-          {/* Process Steps - 2x2 Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mb-24">
-            {/* Step 1: Consultation */}
-            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-orange-100/50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-green-500"></div>
-
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl">📞</span>
-                </div>
-                <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Free 15-Minute Consultation</h3>
-                  <p className="text-orange-600 font-semibold">Step 1: Let's talk</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <p className="text-gray-700 leading-relaxed">
-                  We start with a quick, no-pressure call to understand what's slowing you down. Can't describe it clearly? That's totally fine.
-                </p>
-                <div className="bg-orange-50 rounded-2xl p-4 shadow-lg border border-orange-100">
-                  <p className="text-gray-800 font-semibold mb-2">What to expect:</p>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700">No sales pitch</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700">Just understanding your pain</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-gray-700">Honest assessment of fit</span>
-                    </div>
+          {/* Process Steps - 1x4 Horizontal Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+            {/* Step 1: Consultation - Blue */}
+            <motion.div 
+              className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-blue-500 relative overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+            >
+              {/* Background accent */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="flex flex-col items-center text-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center shadow-lg mb-4">
+                    <span className="text-3xl">📞</span>
                   </div>
+                  <span className="text-sm font-bold text-blue-600 uppercase tracking-wider mb-2">Step 1</span>
+                  <h3 className="text-xl font-bold text-gray-900">Free Consultation</h3>
                 </div>
-              </div>
-            </div>
 
-            {/* Step 2: Audit */}
-            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-lime-100/50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-green-500"></div>
-
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl">🔍</span>
-                </div>
-                <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">In-Depth Systems Audit</h3>
-                  <p className="text-lime-600 font-semibold">Step 2: We dig deep</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <p className="text-gray-700 leading-relaxed">
-                  If it's a good fit, we come to your site (or Zoom in), dig into your current workflow, and identify what's costing you time, energy, and money.
-                </p>
-                <div className="bg-lime-50 rounded-2xl p-4 shadow-lg border border-lime-100">
-                  <p className="text-gray-800 font-semibold mb-2">We analyze everything:</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
-                      <span className="text-gray-700 text-sm">Current tools & software</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
-                      <span className="text-gray-700 text-sm">Workflow bottlenecks</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
-                      <span className="text-gray-700 text-sm">Automation opportunities</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-lime-500 rounded-full"></div>
-                      <span className="text-gray-700 text-sm">Cost vs. benefit analysis</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 3: Plan */}
-            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-yellow-100/50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-400 to-green-500"></div>
-
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl">📋</span>
-                </div>
-                <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Custom Plan & Quote</h3>
-                  <p className="text-yellow-600 font-semibold">Step 3: Your blueprint</p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <p className="text-gray-700 leading-relaxed">
-                  No cookie-cutters here. We'll design a bespoke solution that shows exactly what we'll build.
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Quick 15-minute call to understand your challenges. No pressure, just clarity.
                 </p>
 
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed">
-                      <span className="font-semibold">What we'll automate</span> – specific tasks and workflows
-                    </p>
+                <div className="space-y-2">
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
+                    <span>No sales pitch</span>
                   </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed">
-                      <span className="font-semibold">Where we'll use AI</span> – and where we won't
-                    </p>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed">
-                      <span className="font-semibold">What tools we'll keep</span> – and what we'll ditch
-                    </p>
-                  </div>
-
-                  <div className="flex items-start space-x-3">
-                    <div className="w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    </div>
-                    <p className="text-gray-700 leading-relaxed">
-                      <span className="font-semibold">Custom quote</span> – with no surprise fees
-                    </p>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></div>
+                    <span>Honest assessment</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Step 4: Build & Results */}
-            <div className="bg-white/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 shadow-2xl border border-lime-100/50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-lime-400 to-green-500"></div>
-
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl">⚙️</span>
+            {/* Step 2: Audit - Orange */}
+            <motion.div 
+              className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-orange-500 relative overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+            >
+              {/* Background accent */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="flex flex-col items-center text-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center shadow-lg mb-4">
+                    <span className="text-3xl">🔍</span>
+                  </div>
+                  <span className="text-sm font-bold text-orange-600 uppercase tracking-wider mb-2">Step 2</span>
+                  <h3 className="text-xl font-bold text-gray-900">Systems Audit</h3>
                 </div>
-                <div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">Build, Deliver & Results</h3>
-                  <p className="text-lime-600 font-semibold">Step 4: We make it happen</p>
-                </div>
-              </div>
 
-              <div className="space-y-4">
-                <p className="text-gray-700 leading-relaxed">
-                  We roll up our sleeves and build the system - fast, securely, and to spec. Once we hit "go," it's game on.
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Deep dive into your workflow to identify bottlenecks and opportunities.
                 </p>
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
-                    <div className="text-lg mb-1">🔧</div>
-                    <p className="text-xs font-semibold text-gray-900">Reliable automations</p>
+                <div className="space-y-2">
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2"></div>
+                    <span>Current tools analysis</span>
                   </div>
-                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
-                    <div className="text-lg mb-1">🔗</div>
-                    <p className="text-xs font-semibold text-gray-900">Seamless integrations</p>
-                  </div>
-                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
-                    <div className="text-lg mb-1">🤖</div>
-                    <p className="text-xs font-semibold text-gray-900">Smart AI implementation</p>
-                  </div>
-                  <div className="bg-lime-50 rounded-xl p-3 shadow-sm">
-                    <div className="text-lg mb-1">🛡️</div>
-                    <p className="text-xs font-semibold text-gray-900">1 year free support</p>
-                  </div>
-                </div>
-
-                <div className="bg-lime-50 rounded-2xl p-4 shadow-lg border border-lime-100 mt-4">
-                  <p className="text-gray-900 font-semibold mb-2">What happens next?</p>
-                  <div className="space-y-2 text-gray-700 text-sm">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>
-                      <span>Daily operations run smoothly</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>
-                      <span>You focus on growing your business</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>
-                      <span>We handle any issues that arise</span>
-                    </div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full mr-2"></div>
+                    <span>Automation opportunities</span>
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
+
+            {/* Step 3: Plan - Lime Green */}
+            <motion.div 
+              className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-lime-500 relative overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+            >
+              {/* Background accent */}
+              <div className="absolute inset-0 bg-gradient-to-br from-lime-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="flex flex-col items-center text-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-lime-400 to-lime-600 rounded-xl flex items-center justify-center shadow-lg mb-4">
+                    <span className="text-3xl">📋</span>
+                  </div>
+                  <span className="text-sm font-bold text-lime-600 uppercase tracking-wider mb-2">Step 3</span>
+                  <h3 className="text-xl font-bold text-gray-900">Custom Blueprint</h3>
+                </div>
+
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  Tailored plan showing what we'll build and exactly how it helps you.
+                </p>
+
+                <div className="space-y-2">
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-lime-500 rounded-full mr-2"></div>
+                    <span>Clear scope & timeline</span>
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-lime-500 rounded-full mr-2"></div>
+                    <span>Transparent pricing</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Step 4: Build & Results - Yellow */}
+            <motion.div 
+              className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-yellow-500 relative overflow-hidden"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -8 }}
+            >
+              {/* Background accent */}
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              
+              <div className="relative z-10">
+                <div className="flex flex-col items-center text-center mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center shadow-lg mb-4">
+                    <span className="text-3xl">⚙️</span>
+                  </div>
+                  <span className="text-sm font-bold text-yellow-600 uppercase tracking-wider mb-2">Step 4</span>
+                  <h3 className="text-xl font-bold text-gray-900">Build & Launch</h3>
+                </div>
+
+                <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                  We build fast and secure. You start saving time immediately.
+                </p>
+
+                <div className="space-y-2">
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-2"></div>
+                    <span>Seamless integrations</span>
+                  </div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="w-1.5 h-1.5 bg-yellow-500 rounded-full mr-2"></div>
+                    <span>1 year free support</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
 
 
@@ -1441,20 +1972,97 @@ const BoringWorkLanding = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="#contact"
-                className="inline-flex items-center justify-center gap-2 bg-lime-500 hover:bg-lime-600 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center gap-2"
+                style={{
+                  backgroundColor: '#1a6388',
+                  boxShadow: '0 4px 14px 0 rgba(26, 99, 136, 0.39)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#145066'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1a6388'}
               >
                 <PhoneCall className="w-4 h-4" />
-                Book Your Free Consult
+                Book Your Free Audit
               </a>
               <a
                 href="#testimonials"
-                className="inline-flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+                className="text-white font-bold text-sm uppercase tracking-wide px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg inline-flex items-center justify-center gap-2"
+                style={{
+                  backgroundColor: '#ea7a2c'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d16a1f'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ea7a2c'}
               >
-                See Success Stories
+                See What's Possible
               </a>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* What's Possible Section - Professional Automation Showcase */}
+      <section
+        className="relative py-20 lg:py-32 overflow-hidden"
+        style={{
+          background: `
+            linear-gradient(135deg, transparent 0px, transparent 9px, rgba(156, 163, 175, 0) 9px, rgba(156, 163, 175, 0) 10px, transparent 10px, transparent 19px, rgba(156, 163, 175, 0) 19px, rgba(156, 163, 175, 0) 20px),
+            linear-gradient(to bottom,
+              rgba(240, 253, 244, 0.1) 0%,
+              rgba(254, 243, 199, 0.1) 30%,
+              rgba(255, 237, 213, 0.1) 60%,
+              rgba(255, 237, 213, 0.3) 100%
+            ),
+            linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+            url(${gradient1Image})
+          `,
+          backgroundSize: '20px 20px, 100% 100%, 100% 100%, cover',
+          backgroundPosition: '0 0, 0 0, 0 0, center'
+        }}
+      >
+        {/* Diagonal Lines Fade-in Overlay */}
+        <div
+          className="absolute inset-0 w-full h-full z-0"
+          style={{
+            background: `repeating-linear-gradient(135deg, transparent, transparent 9px, rgba(156, 163, 175, 0.04) 9px, rgba(156, 163, 175, 0.04) 10px)`,
+            mask: `linear-gradient(to bottom, transparent 0%, transparent 66.67%, black 100%)`,
+            WebkitMask: `linear-gradient(to bottom, transparent 0%, transparent 20.67%, black 100%)`
+          }}
+        />
+
+        {/* Creative Background Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 right-10 w-96 h-96 bg-gradient-to-br from-blue-200/20 to-purple-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-tl from-orange-200/20 to-yellow-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-emerald-200/10 to-lime-200/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <h2 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+              What's Possible
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Explore automation categories and discover how we transform local businesses. Click tabs to browse, expand cards for details.
+            </p>
+          </div>
+
+          {/* Interactive Category Cards */}
+          <WhatsPossibleCategories />
+        </div>
+
+        {/* Decorative Gears Background - Bottom */}
+        <div 
+          className="absolute bottom-0 left-0 right-0 w-full h-[600px] pointer-events-none z-10"
+          style={{
+            backgroundImage: `url(${gearsImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center bottom',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.2,
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 50%, black 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 50%, black 100%)'
+          }}
+        />
       </section>
 
       {/* SMS Popup */}
